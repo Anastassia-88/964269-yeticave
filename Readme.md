@@ -1,7 +1,8 @@
 # Личный проект «YetiCave»
 
 * Студент: [Anastassia Russak](https://up.htmlacademy.ru/php/8/user/964269).
-* Наставник: `Неизвестно`.
+* Наставник: [Денис Байдаров](https://htmlacademy.ru/profile/4er).
+
 
 ---
 
