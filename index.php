@@ -27,7 +27,7 @@ $user_name = 'Anastassia'; // укажите здесь ваше имя
         <nav class="user-menu">
             <?php if($is_auth): ?>
                 <div class="user-menu__logged">
-                    <p><?php print($user_name); ?></p>
+                    <p><?=$user_name; ?></p>
                 </div>
             <?php else: ?>
                 <ul class="user-menu__list">
