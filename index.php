@@ -40,12 +40,9 @@ $goods = [
         'image' => 'img/lot-6.jpg'
     ]
 ];
-function price_formatting($price) {
+function price_format($price) {
     ceil($price);
-    if ($price < 1000) {
-            return $price . " &#8381;";
-        }
-    else {return number_format($price) . " &#8381;";}
+    return number_format($price) . " &#8381;";
     }
 ?>
 <!DOCTYPE html>
@@ -122,7 +119,7 @@ function price_formatting($price) {
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
-                                    <span class="lot__cost"><?= price_formatting($lot['price']); ?></span>
+                                    <span class="lot__cost"><?= price_format($lot['price']); ?></span>
                                 </div>
                                 <div class="lot__timer timer">
                                     12:23
