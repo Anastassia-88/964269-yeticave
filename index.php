@@ -41,8 +41,8 @@ $goods = [
     ]
 ];
 function price_format($price) {
-    ceil($price);
-    return number_format($price) . " &#8381;";
+    $price_formatted = ceil($price);
+    return number_format($price_formatted) . " &#8381;";
     }
 ?>
 <!DOCTYPE html>
