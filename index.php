@@ -40,13 +40,8 @@ $goods = [
         'image' => 'img/lot-6.jpg'
     ]
 ];
-function price_format($price) {
-    $price_formatted = ceil($price);
-    return number_format($price_formatted) . " &#8381;";
-    }
 require('functions.php');
 $page_content = include_template('main.php', ['goods' => $goods, 'categories' => $categories]);
 $layout_content = include_template('layout.php',
     ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
 print($layout_content);
-?>
