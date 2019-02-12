@@ -20,11 +20,11 @@
         <?php foreach ($goods as $lot): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="<?= $lot['image']; ?>" width="350" height="260" alt="">
+                    <img src="<?= htmlspecialchars($lot['image']); ?>" width="350" height="260" alt="">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?= $lot['category']; ?></span>
-                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $lot['name']; ?></a>
+                    <span class="lot__category"><?= htmlspecialchars($lot['category']); ?></span>
+                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= htmlspecialchars($lot['name']); ?></a>
                     </h3>
                     <div class="lot__state">
                         <div class="lot__rate">

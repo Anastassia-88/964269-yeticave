@@ -41,7 +41,7 @@ $goods = [
     ]
 ];
 require('functions.php');
-$page_content = include_template('main.php', ['goods' => $goods, 'categories' => $categories]);
+$page_content = include_template('index.php', ['goods' => $goods, 'categories' => $categories]);
 $layout_content = include_template('layout.php',
     ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
 print($layout_content);
