@@ -1,6 +1,11 @@
 <?php
 $is_auth = rand(0, 1);
 $user_name = 'Anastassia'; // укажите здесь ваше имя
+
+date_default_timezone_set('Europe/Berlin');
+$rest_time = strtotime("tomorrow midnight") - strtotime("now");
+$rest_time_format = date("H:i", $rest_time);
+
 $categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
 $goods = [
     [
@@ -40,8 +45,10 @@ $goods = [
         'image' => 'img/lot-6.jpg'
     ]
 ];
+
 require('functions.php');
 $page_content = include_template('index.php', ['goods' => $goods, 'categories' => $categories]);
 $layout_content = include_template('layout.php',
     ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
 print($layout_content);
+
