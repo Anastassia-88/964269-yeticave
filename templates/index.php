@@ -32,7 +32,7 @@
                             <span class="lot__cost"><?= price_format($lot['price']); ?></span>
                         </div>
                         <div class="lot__timer timer">
-                            <?= print($rest_time_format); ?>
+                            <?= $rest_time_format; ?>
                         </div>
                     </div>
                 </div>
