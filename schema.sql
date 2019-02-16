@@ -47,10 +47,6 @@ create table users (
                      bets_id char -- ставки, связь с таблицей bets
 );
 
--- заполняем таблицы
-insert into categories (name)
-values ('Доски и лыжи'), ('Крепления'), ('Ботинки'), ('Одежда'), ('Инструменты'), ('Разное');
-
 -- добавляем уникальные индексы полям, где должны быть только уникальные значения
 create unique index u_email on users(email);
 create unique index u_name on users(name);
