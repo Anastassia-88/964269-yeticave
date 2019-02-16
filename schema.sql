@@ -3,6 +3,9 @@ create database yeticave
   default character set utf8
   default collate utf8_general_ci;
 
+-- делаем базу данных активной
+use yeticave;
+
 -- создаем таблицы на каждую сущность
 
 create table categories (
