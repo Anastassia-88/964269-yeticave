@@ -35,15 +35,15 @@ from lots l
 join bets b
 on b.lot_id = l.id
 join categories c
-on l.category_id = c.name
+on l.category_id = c.id
 where winner_id  is null
 order by l.dt_add desc;
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот
-select l.name, c.name
+select l.id, l.name, c.name
 from lots l
 join categories c
-on l.category_id = c.name
+on l.category_id = c.id
 where l.id = 1;
 
 -- обновить название лота по его идентификатору;
