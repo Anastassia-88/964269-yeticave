@@ -37,12 +37,12 @@ create table bets (
 
 create table users (
                           id int auto_increment primary key, -- первичный ключ
-                          dt_registration timestamp default current_timestamp,
+                          dt_add timestamp default current_timestamp,
                           email char(128) not null unique, -- email
                           name char not null, -- имя
                           password char(64) not null, -- пароль
                           avatar text, -- аватар
-                          contacts text not null, -- контакты
+                          contacts text not null -- контакты
 );
 
 -- добавляем уникальные индексы полям, где должны быть только уникальные значения
