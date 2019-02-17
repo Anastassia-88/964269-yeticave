@@ -37,7 +37,7 @@ create table bets (
 
 create table users (
                           id int auto_increment primary key, -- первичный ключ
-                          dt_add timestamp default current_timestamp,
+                          dt_add timestamp default current_timestamp, -- дата регистрации
                           email char(128) not null unique, -- email
                           name char not null, -- имя
                           password char(64) not null, -- пароль
