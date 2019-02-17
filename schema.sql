@@ -32,7 +32,7 @@ create table bets (
                           dt timestamp default current_timestamp, -- дата
                           amount decimal not null, -- сумма
                           user_id int not null, -- пользователь, связь с таблицей users
-                          lot_id tinyint not null -- лот, связь с таблицей lots
+                          lot_id int not null -- лот, связь с таблицей lots
 );
 
 create table users (
