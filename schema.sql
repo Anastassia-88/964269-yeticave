@@ -29,7 +29,7 @@ create table lots (
 
 create table bets (
                           id int auto_increment primary key, -- первичный ключ
-                          dt timestamp, -- дата
+                          dt timestamp default current_timestamp, -- дата
                           amount decimal not null, -- сумма
                           user_id int not null, -- пользователь, связь с таблицей users
                           lot_id tinyint not null -- лот, связь с таблицей lots
