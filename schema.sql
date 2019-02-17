@@ -10,15 +10,15 @@ use yeticave;
 
 create table categories (
                           id int auto_increment primary key, -- первичный ключ
-                          name char not null -- название
+                          name char(255) not null -- название
 );
 
 create table lots (
                           id int auto_increment primary key, -- первичный ключ
                           dt_add timestamp default current_timestamp, -- дата создания
-                          name char not null, -- название
+                          name char(255) not null, -- название
                           description text, -- описание
-                          image char, -- изображение
+                          image char(255), -- изображение
                           start_price decimal not null, -- начальная цена
                           dt_end timestamp, -- дата завершения
                           bet_step decimal not null default 100, -- шаг ставки
@@ -38,9 +38,9 @@ create table bets (
 create table users (
                           id int auto_increment primary key, -- первичный ключ
                           dt_add timestamp default current_timestamp, -- дата регистрации
-                          email char not null unique, -- email
-                          name char not null, -- имя
-                          password char not null, -- пароль
+                          email char(255) not null unique, -- email
+                          name char(255) not null, -- имя
+                          password char(255) not null, -- пароль
                           avatar text, -- аватар
                           contacts text not null -- контакты
 );
