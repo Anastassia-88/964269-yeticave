@@ -21,7 +21,7 @@ create table lots (
                           image char, -- изображение
                           start_price decimal not null, -- начальная цена
                           dt_end timestamp, -- дата завершения
-                          bet_step decimal not null, -- шаг ставки
+                          bet_step decimal not null default 100, -- шаг ставки
                           user_id int not null, -- автор, связь с таблицей users
                           category_id int not null, -- категория, связь с таблицей categories
                           winner_id int -- победитель, связь с таблицей users
