@@ -32,14 +32,15 @@ values
 select *
 from categories;
 
--- получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории;
-select l.name, start_price, image, amount, c.name
+-- получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории
+select l.name, start_price, image, max(amount) as price, c.name
 from lots l
-left join bets b
-on b.lot_id = l.id
 join categories c
 on l.category_id = c.id
-where winner_id  is null
+left join bets b
+on b.lot_id = l.id
+where winner_id is null
+group by l.id
 order by l.id desc;
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот
@@ -54,7 +55,7 @@ update lots
 set name = 'Rossignol District Snowboard 2014'
 where id = 1;
 
--- получить список самых свежих ставок для лота по его идентификатору;
+-- получить список самых свежих ставок для лота по его идентификатору
 select *
 from bets b
 where lot_id = 1
