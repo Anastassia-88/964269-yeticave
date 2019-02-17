@@ -1,16 +1,18 @@
 -- делаем базу данных активной
 use yeticave;
 
--- заполняем таблицы
+-- Существующий список категорий
 insert into categories (name)
 values
 ('Доски и лыжи'), ('Крепления'), ('Ботинки'), ('Одежда'), ('Инструменты'), ('Разное');
 
+-- Придумайте пару пользователей
 insert into users (email, name, password, contacts)
 values
 ("anastassia.russak@gmail.com", "AR", "123", "Моя почта - anastassia.russak@gmail.com"),
 ("oleg.russak88@gmail.com", "OR", "123", "Моя почта - oleg.russak88@gmail.com");
 
+-- Существующий список объявлений
 insert into lots (name, image, start_price, user_id, category_id)
 values
 ("2014 Rossignol District Snowboard", "img/lot-1.jpg", 10999, 1, 1),
@@ -20,6 +22,7 @@ values
 ("Куртка для сноуборда DC Mutiny Charocal", "img/lot-5.jpg", 7500, 2, 4),
 ("Маска Oakley Canopy", "img/lot-6.jpg", 5400, 2, 6);
 
+-- Добавьте пару ставок для любого объявления
 insert into bets (amount, user_id, lot_id)
 values
 (11100, 1, 1),
@@ -30,14 +33,14 @@ select *
 from categories;
 
 -- получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории;
-select l.name, start_price, image, c.name, amount
+select l.name, start_price, image, amount, c.name
 from lots l
-join bets b
+left join bets b
 on b.lot_id = l.id
 join categories c
 on l.category_id = c.id
 where winner_id  is null
-order by l.dt_add desc;
+order by l.id desc;
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот
 select l.id, l.name, c.name
