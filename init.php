@@ -7,10 +7,3 @@ if ($link == false) {
 }
 // Устанавливаем кодировку в utf8
 mysqli_set_charset($link, "utf8");
-
-
-
-
-
-
-
