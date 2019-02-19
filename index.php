@@ -16,7 +16,6 @@ where winner_id is null
 group by l.id
 order by l.id desc;
 ";
-$data = ["", "", ""];
 db_fetch_data($link, $sql);
 
 // SQL-запрос для получения списка категорий
