@@ -1,54 +1,62 @@
 <?php
 $is_auth = rand(0, 1);
-$user_name = 'Anastassia'; // укажите здесь ваше имя
-$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
-$goods = [
-    [
-        'name' => '2014 Rossignol District Snowboard',
-        'category' => 'Доски и лыжи',
-        'price' => '10999',
-        'image' => 'img/lot-1.jpg',
-        'current_time' => strtotime(now) // время публикации лота
-    ],
-    [
-        'name' => 'DC Ply Mens 2016/2017 Snowboard',
-        'category' => 'Доски и лыжи',
-        'price' => '159999',
-        'image' => 'img/lot-2.jpg',
-        'current_time' => strtotime(now) // время публикации лота
-    ],
-    [
-        'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category' => 'Крепления',
-        'price' => '8000',
-        'image' => 'img/lot-3.jpg',
-        'current_time' => strtotime(now) // время публикации лота
-    ],
-    [
-        'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category' => 'Ботинки',
-        'price' => '10999',
-        'image' => 'img/lot-4.jpg',
-        'current_time' => strtotime(now) // время публикации лота
-    ],
-    [
-        'name' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'category' => 'Одежда',
-        'price' => '7500',
-        'image' => 'img/lot-5.jpg',
-        'current_time' => strtotime(now) // время публикации лота
-    ],
-    [
-        'name' => 'Маска Oakley Canopy',
-        'category' => 'Разное',
-        'price' => '5400',
-        'image' => 'img/lot-6.jpg',
-        'current_time' => strtotime(now) // время публикации лота
-    ]
-];
+$user_name = 'Anastassia';
+require_once 'init.php';
+require_once 'functions.php';
 
-require('functions.php');
-$page_content = include_template('index.php', ['goods' => $goods, 'categories' => $categories]);
+// SQL-запрос для получения списка новых лотов
+$sql = "
+select l.name, start_price, image, max(amount) as price, c.name
+from lots l
+join categories c
+on l.category_id = c.id
+left join bets b
+on b.lot_id = l.id
+where winner_id is null
+group by l.id
+order by l.id desc;
+";
+$data = ["", "", ""];
+db_fetch_data($link, $sql);
+
+// SQL-запрос для получения списка категорий
+$sql = "select 
+select *
+from categories;
+";
+$data = ["", "", ""];
+db_fetch_data($link, $sql);
+
+// добавление новой записи в таблицу лотов
+$sql = "
+insert into lots
+(name, start_price, user_id, category_id)
+values
+(?, ?, ?, ?)
+";
+$data = ["Очки", "500", "2", "7"];
+db_insert_data($link, $sql, $data = []);
+
+$sql = "
+insert into lots
+(name, start_price, user_id, category_id)
+values
+(?, ?, ?, ?)
+";
+$data = ["Перчатки", "400", "2", "8"];
+db_insert_data($link, $sql, $data = []);
+
+// добавление новой записи в таблицу категорий
+$sql = "
+insert into categories 
+(name)
+values
+(?), (?) 
+";
+$data = ["Очки", "Перчатки"];
+db_insert_data($link, $sql, $data = []);
+
+$page_content = include_template('index.php', ['lots' => $lots, 'categories' => $categories]);
 $layout_content = include_template('layout.php',
     ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
 
