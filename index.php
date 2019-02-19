@@ -20,7 +20,7 @@ $data = ["", "", ""];
 db_fetch_data($link, $sql);
 
 // SQL-запрос для получения списка категорий
-$sql = "select 
+$sql = "
 select *
 from categories;
 ";
