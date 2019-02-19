@@ -6,7 +6,7 @@ if ($link == false) {
     print("Ошибка подключения: " . mysqli_connect_error());
 }
 // Устанавливаем кодировку в utf8
-mysqli_set_charset($con, "utf8");
+mysqli_set_charset($link, "utf8");
 
 
 
