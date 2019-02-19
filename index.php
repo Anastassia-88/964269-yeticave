@@ -24,7 +24,6 @@ $sql = "
 select *
 from categories;
 ";
-$data = ["", "", ""];
 db_fetch_data($link, $sql);
 
 // добавление новой записи в таблицу лотов
