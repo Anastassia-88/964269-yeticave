@@ -96,3 +96,10 @@ function get_time($dt_add) {
     return date("H:i", $rest_time);
 }
 
+// Вывод всех категорий
+function get_categories($link){
+    $sql = "select * from categories;";
+    $categories = db_fetch_data($link, $sql);
+    return $categories;
+}
+

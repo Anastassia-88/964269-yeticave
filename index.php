@@ -19,11 +19,7 @@ order by l.id desc;
 $lots = db_fetch_data($link, $sql);
 
 // SQL-запрос для получения списка категорий
-$sql = "
-select *
-from categories;
-";
-$categories = db_fetch_data($link, $sql);
+$categories = get_categories($link);
 
 $page_content = include_template('index.php', ['lots' => $lots, 'categories' => $categories]);
 $layout_content = include_template('layout.php',
