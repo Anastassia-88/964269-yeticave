@@ -6,7 +6,7 @@ require_once 'functions.php';
 
 // SQL-запрос для получения списка новых лотов
 $sql = "
-select start_price, l.name as name, image, c.name as category
+select start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(dt_add)
 from lots l
 join categories c
 on l.category_id = c.id
@@ -25,7 +25,6 @@ select *
 from categories;
 ";
 $categories = db_fetch_data($link, $sql);
-var_dump($categories);
 
 $page_content = include_template('index.php', ['lots' => $lots, 'categories' => $categories]);
 $layout_content = include_template('layout.php',

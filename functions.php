@@ -90,9 +90,9 @@ function price_format($price) {
 }
 
 // Сколько часов и минут осталось до новых суток
-function get_time($current_time) {
+function get_time($dt_add) {
     date_default_timezone_set('Europe/Berlin');
-    $rest_time = strtotime("tomorrow") - $current_time;
+    $rest_time = strtotime("tomorrow") - $dt_add;
     return date("H:i", $rest_time);
 }
 
