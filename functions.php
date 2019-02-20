@@ -103,3 +103,24 @@ function get_categories($link){
     return $categories;
 }
 
+// Вывод новых лотов
+function get_lots($link){ 
+    $sql = "
+    select start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add
+    from lots l
+    join categories c
+    on l.category_id = c.id
+    left join bets b
+    on b.lot_id = l.id
+    where winner_id is null
+    group by l.id
+    order by l.id desc;";
+    $lots = db_fetch_data($link, $sql);
+    return $lots;
+}
+
+
+
+
+
+
