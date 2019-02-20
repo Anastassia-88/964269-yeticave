@@ -4,25 +4,6 @@ $user_name = 'Anastassia';
 require_once 'init.php';
 require_once 'functions.php';
 
-// добавление новой записи в таблицу категорий
-$sql = "insert into categories (name) values (?), (?)";
-$data = ["Очки", "Перчатки"];
-db_insert_data($link, $sql, $data = []);
-
-// добавление новой записи в таблицу лотов
-$sql = "insert into lots (name, start_price, user_id, category_id)
-values (?, ?, ?, ?)";
-$data = ['Лыжные очки', 500, 2, 7];
-db_insert_data($link, $sql, $data = []);
-
-// добавление новой записи в таблицу лотов
-$sql = "insert into lots
-(name, start_price, user_id, category_id)
-values
-(?, ?, ?, ?)";
-$data = ['Перчатки лыжные', 400, 2, 8];
-db_insert_data($link, $sql, $data = []);
-
 // SQL-запрос для получения списка новых лотов
 $sql = "
 select start_price, l.name as name, image, c.name as category
