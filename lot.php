@@ -9,7 +9,7 @@ $categories = get_categories($link);
 $lot = get_lot($link);
 var_dump($lot);
 
-$page_content = include_template('lot.php', ['lot' => lot]);
+$page_content = include_template('lot.php', ['lot' => $lot, 'categories' => $categories]);
 print($page_content);
 
 
