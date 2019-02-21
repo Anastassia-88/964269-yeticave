@@ -125,7 +125,7 @@ function get_lot($link) {
     where l.id = ?;";
     $lot_id = $_GET['id'];
     if ($lot_id) {
-    $lot = db_fetch_data($link, $sql,  $data = [$lot_id);
+    $lot = db_fetch_data($link, $sql,  $data = [$lot_id]);
     return $lot;
     }
     else {
