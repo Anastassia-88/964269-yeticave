@@ -123,14 +123,14 @@ function get_lots($link){
 }
 
 // Вывод лота по id
-function get_lot($link, $data = []) {
+function get_lot($link) {
     $sql = "select
     l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add
     from lots l
     join categories c
     on l.category_id = c.id
     where l.id = ?;";
-    $lot = db_fetch_data($link, $sql,  $data = []);
+    $lot = db_fetch_data($link, $sql,  $data = [$_GET['id']]);
     return $lot;
 }
 
