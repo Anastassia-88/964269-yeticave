@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?phpDC Ply Mens 2016/2017 Snowboard</title>
+    <title><?= htmlspecialchars($lot['name']); ?></title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 </head>
@@ -45,7 +45,6 @@
             </ul>
         </nav>
         <section class="lot-item container">
-            <?php foreach ($lot as $lot): ?>
             <h2><?= htmlspecialchars($lot['name']); ?></h2>
             <div class="lot-item__content">
                 <div class="lot-item__left">
@@ -134,8 +133,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
-            <?php endforeach; ?>
+            </div>            
         </section>
     </main>
 
