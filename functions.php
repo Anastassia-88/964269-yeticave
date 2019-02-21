@@ -130,7 +130,8 @@ function get_lot($link) {
     join categories c
     on l.category_id = c.id
     where l.id = ?;";
-    $lot = db_fetch_data($link, $sql,  $data = [$_GET['id']]);
+    $lot_id = $_GET['id'];
+    $lot = db_fetch_data($link, $sql,  $data = [$lot_id);
     return $lot;
 }
 
