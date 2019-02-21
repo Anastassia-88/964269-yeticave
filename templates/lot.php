@@ -47,6 +47,7 @@
         <section class="lot-item container">
             <h2><?= htmlspecialchars($lot['name']); ?></h2>
             <div class="lot-item__content">
+                <?php foreach($lot as $lot): ?>
                 <div class="lot-item__left">
                     <div class="lot-item__image"><?= htmlspecialchars($lot['image']); ?>
                         <img src="<?= htmlspecialchars($lot['image']); ?>" width="730" height="548" alt="<?= htmlspecialchars($lot['name']); ?>">
@@ -133,6 +134,7 @@
                         </table>
                     </div>
                 </div>
+                <?php endforeach; ?>
             </div>            
         </section>
     </main>
