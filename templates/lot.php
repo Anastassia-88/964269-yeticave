@@ -57,7 +57,7 @@
                 <div class="lot-item__right">
                     <div class="lot-item__state">
                         <div class="lot-item__timer timer">
-                            10:54
+                            <?= get_time($lot['dt_add']); ?>
                         </div>
                         <div class="lot-item__cost-state">
                             <div class="lot-item__rate">
@@ -65,7 +65,7 @@
                                 <span class="lot-item__cost">10 999</span>
                             </div>
                             <div class="lot-item__min-cost">
-                                Мин. ставка <span>12 000 р</span>
+                                Мин. ставка <span><?= price_format($lot['start_price']); ?></span>
                             </div>
                         </div>
                         <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
