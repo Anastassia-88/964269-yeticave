@@ -43,7 +43,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     return $stmt;
 }
 
-// Получение записей из БД
+// Получение записей из БД в виде двумерного массива
 function db_fetch_data($link, $sql, $data = []) {
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -51,6 +51,18 @@ function db_fetch_data($link, $sql, $data = []) {
     $res = mysqli_stmt_get_result($stmt);
     if ($res) {
         $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+    return $result;
+}
+
+// Получение записей из БД в виде одномерного массива (один лот)
+function db_fetch_data_1($link, $sql, $data = []) {
+    $result = [];
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    if ($res) {
+        $result = mysqli_fetch_row($res);
     }
     return $result;
 }
@@ -123,6 +135,6 @@ function get_lot($link, $lot_id) {
     join categories c
     on l.category_id = c.id
     where l.id = ?;";
-    $lot = db_fetch_data($link, $sql,  $data = [$lot_id]);
+    $lot = db_fetch_data($link, $sql, $data = [$lot_id]);
     return $lot;
 }
