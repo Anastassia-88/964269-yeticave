@@ -1,6 +1,7 @@
 <?php
 $is_auth = rand(0, 1);
 $user_name = 'Anastassia';
+
 require_once 'init.php';
 require_once 'functions.php';
 
