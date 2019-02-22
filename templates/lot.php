@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-<?php foreach($lot as $lot): ?>
 <head>
     <meta charset="UTF-8">
 
@@ -140,7 +139,6 @@
     </main>
 
 </div>
-<?php endforeach; ?>
 
 <footer class="main-footer">
     <nav class="nav">
@@ -196,23 +194,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
