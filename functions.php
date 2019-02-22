@@ -124,13 +124,8 @@ function get_lot($link) {
     on l.category_id = c.id
     where l.id = ?;";
     $lot_id = $_GET['id'];
-    if ($lot_id) {
     $lot = db_fetch_data($link, $sql,  $data = [$lot_id]);
     return $lot;
-    }
-    else {
-    return http_resonse_code (404);                                
-    }
 }
 
 

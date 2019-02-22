@@ -8,7 +8,16 @@ $categories = get_categories($link);
 
 // запрос для получения массива лота
 $lot = get_lot($link);
+if ($lot) {
+    $page_content = include_template('lot.php', ['lot' => $lot, 'categories' => $categories]);
+}
+else {
 
-$page_content = include_template('lot.php', ['lot' => $lot, 'categories' => $categories]);
+    $page_content = include_template('error.php', ['categories' => $categories]);
+    http_response_code (404);
+}
 print($page_content);
+
+
+
 
