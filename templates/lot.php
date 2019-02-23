@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <?php foreach($lot as $lot): ?>
     <title><?= htmlspecialchars($lot['name']); ?></title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
@@ -135,7 +134,6 @@
                         </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
         </section>
     </main>
 
