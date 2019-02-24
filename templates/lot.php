@@ -13,14 +13,14 @@
     <header class="main-header">
         <div class="main-header__container container">
             <h1 class="visually-hidden">YetiCave</h1>
-            <a class="main-header__logo" href="index.html">
+            <a class="main-header__logo" href="index.php">
                 <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
             <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru">
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
-            <a class="main-header__add-lot button" href="add-lot.html">Добавить лот</a>
+            <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
             <nav class="user-menu">
                 <ul class="user-menu__list">
                     <li class="user-menu__item">
@@ -39,7 +39,7 @@
             <ul class="nav__list container">
                 <?php foreach ($categories as $category): ?>
                     <li class="nav__item">
-                        <a href="all-lots.html"><?= htmlspecialchars($category['name']); ?></a>
+                        <a href="all-lots.html"><?= $category['name']; ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -51,7 +51,7 @@
                         <div class="lot-item__image">
                             <img src="<?= htmlspecialchars($lot['image']); ?>" width="730" height="548" alt="<?= htmlspecialchars($lot['name']); ?>">
                         </div>
-                        <p class="lot-item__category">Категория: <span><?= htmlspecialchars($lot['category']); ?></span></p>
+                        <p class="lot-item__category">Категория: <span><?= $lot['category']; ?></span></p>
                         <p class="lot-item__description"><?= htmlspecialchars($lot['description']); ?></p>
                     </div>
                     <div class="lot-item__right">
