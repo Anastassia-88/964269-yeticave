@@ -16,8 +16,8 @@ create table categories (
 create table lots (
                           id int auto_increment primary key, -- первичный ключ
                           dt_add timestamp default current_timestamp, -- дата создания
-                          name char(255) not null, -- название
-                          description text, -- описание
+                          name char(255) not null, -- название лота
+                          description text, -- описание лота
                           image char(255), -- изображение
                           start_price decimal not null, -- начальная цена
                           dt_end timestamp, -- дата завершения
