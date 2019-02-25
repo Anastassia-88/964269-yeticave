@@ -15,15 +15,15 @@ create table categories (
 
 create table lots (
                           id int auto_increment primary key, -- первичный ключ
-                          dt_add timestamp default current_timestamp, -- дата создания
-                          name char(255) not null, -- название лота
-                          description text, -- описание лота
-                          image char(255), -- изображение
-                          start_price decimal not null, -- начальная цена
-                          dt_end timestamp, -- дата завершения
-                          bet_step decimal not null default 100, -- шаг ставки
+                          dt_add timestamp default current_timestamp, -- дата создания лота
+                          name char(255) not null, -- Название лота
+                          description text, -- Описание лота
+                          image char(255), -- Изображение лота
+                          start_price decimal not null, -- Начальная цена лота
+                          dt_end timestamp, -- Дата завершения
+                          bet_step decimal not null default 100, -- Шаг ставки
                           user_id int not null, -- автор, связь с таблицей users
-                          category_id int not null, -- категория, связь с таблицей categories
+                          category_id int not null, -- Категория, связь с таблицей categories
                           winner_id int -- победитель, связь с таблицей users
 );
 

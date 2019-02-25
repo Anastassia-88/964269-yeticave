@@ -6,45 +6,80 @@ require_once 'functions.php';
 // запрос для получения массива категорий
 $categories = get_categories($link);
 
-$page_content = include_template('add.php', ['categories' => $categories]);
-
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную $lot
-    $lot = $_POST;
+    $lot = $_POST['lot'];
     var_dump($lot);
-    // Затем определяеи список полей, которые собираемся валидировать
-    $required = ['name', 'category', 'description', 'image', 'start_price', 'bet_step', 'dt_end'];
+    var_dump($_FILES);
+    // Затем определяем список полей, которые собираемся валидировать
+    $required_fields = ['name', 'category', 'description', 'start_price', 'bet_step', 'dt_end'];
+    $dict = ['name' => 'Название лота', 'category' => 'Категория', 'description' => 'Описание лота',
+        'image' => 'Изображение лота', 'start_price' => 'Начальная цена лота', 'bet_step' => 'Шаг ставки',
+        'dt_end' => 'Дата завершения'];
     // Определяем пустой массив $errors, который будем заполнять ошибками валидации
     $errors = [];
     // Обходим массив $_POST. Здесь в переменной $key будет имя поля (из атрибута name).
     // Далее мы проверяем существование каждого поля в списке обязательных к заполнению.
     // И если оно там есть, а также поле не заполнено, то добавляем ошибку валидации в список ошибок
-    foreach ($required as $key) {
-        if (empty($_POST[$key])) {
-            $errors[$key] = 'Это поле надо заполнить';
+    foreach ($required_fields as $field) {
+        if (empty($lot[$field])) {
+            $errors[$field] = 'Поле не заполнено';
         }
     }
-    // Проверим, был ли загружен файл. Поле для загрузки файла в форме называется 'image',
+    // Проверка для категорий
+    if ($lot['category'] == 'select'){
+        $errors['category'] = 'Поле не заполнено';
+
+    }
+    // Проверка начальной цены. Содержимое поля должно быть числом больше нуля
+    if (!intval($lot['start_price']) or intval($lot['start_price'])<=0) {
+        $errors['start_price'] = 'Введите число больше нуля';
+    }
+    // Проверка шага ставки. Содержимое поля должно быть числом больше нуля
+    if (!intval($lot['bet_step']) or intval($lot['bet_step'])<=0) {
+        $errors['bet_step'] = 'Введите число больше нуля';
+    }
+    //Проверка даты завершения
+    //Содержимое поля «дата завершения» должно быть датой в формате «ДД.ММ.ГГГГ»
+    if (!strtotime($lot['dt_end'])) {
+        $errors['dt_end'] = 'Введите дату в формате «ДД.ММ.ГГГГ»';
+
+    }
+        //Проверка даты завершения
+        //Указанная дата должна быть больше текущей даты, хотя бы на один день
+    if (strtotime($lot['dt_end']) - strtotime("tomorrow") < 0) {
+        $errors['dt_end'] = 'Указанная дата должна быть больше текущей даты';
+    }
+
+        // Проверим, был ли загружен файл. Поле для загрузки файла в форме называется 'image',
     // поэтому нам следует искать в массиве $_FILES одноименный ключ.
     // Если таковой найден, то мы можем получить имя загруженного файла
+
     if (isset($_FILES['image']['name'])) {
         $tmp_name = $_FILES['image']['tmp_name'];
         $path = $_FILES['image']['name'];
 
         // С помощью стандартной функции finfo_ можно получить информацию о типе файле
-        $finfo = finfo_open(fileinfo_mime_type);
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
+
+
         if ($file_type !== "image/jpeg" or "image/png") {
-            $errors['file'] = 'Загрузите картинку в формате jpg, jpeg или png';
+            $errors['image'] = 'Загрузите картинку в формате jpg, jpeg или png';
         }
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $lot
         else {
-            move_uploaded_file($tmp_name, 'img/' . $path);
+            echo 1; move_uploaded_file($tmp_name, 'img/' . $path);
             $lot['img'] = $path;
         }
+
+
+
+
     }
     // Если файл не был загружен, добавляем ошибку
     else {$errors['image'] = 'Вы не загрузили файл';
@@ -54,12 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок
     if (count($errors)) {
-        $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'dict' => $dict, 'categories' => $categories]);
+        var_dump($errors);
+        $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'dict' => $dict,
+            'categories' => $categories]);
     }
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Отправляем лот в базу данных
-        $new_lot_data = [$lot['name'], $lot['description'], $lot['image'], $lot['start_price'], $lot['dt_end'], $lot['bet_step'], $lot['category']];
+        $new_lot_data = [$lot['name'], $lot['description'], $lot['image'], $lot['start_price'], $lot['dt_end'],
+            $lot['bet_step'], $lot['category']];
         add_lot($link, $new_lot_data);
         // Получаем ID нового лота и перенаправляем пользователя на страницу с его просмотром
         $lot_id = mysqli_insert_id($link);
@@ -72,6 +110,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 else {
     $page_content = include_template('add.php', ['categories' => $categories]);
 }
-
 
 print($page_content);
