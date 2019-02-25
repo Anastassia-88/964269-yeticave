@@ -136,7 +136,7 @@
         $value = isset($lot['dt_end']) ? $lot['dt_end'] : ""; ?>
         <div class="form__item <?= $classname; ?>">
           <label for="lot-date">Дата окончания торгов</label>
-          <input class="form__input-date" id="lot-date" type="date" name="lot[dt_end]" value="<?= $value; ?>">
+          <input class="form__input-date" id="lot-date" type="text" name="lot[dt_end]" value="<?= $value; ?>">
             <?php if (isset($errors['dt_end'])): ?>
           <span class="form__error"><?=  $errors['dt_end']; ?></span>
             <?php endif; ?>

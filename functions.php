@@ -122,7 +122,8 @@ function get_lots($link){
     join categories c
     on l.category_id = c.id
     where winner_id is null
-    order by l.id desc;";
+    order by l.id desc
+    LIMIT 9;";
     $lots = db_fetch_data($link, $sql);
     return $lots;
 }
@@ -143,5 +144,15 @@ function get_lot($link, $lot_id) {
 function add_lot($link, $new_lot_data) {
 $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
 values (now(), ?, ?, ?, ?, ?, ?, 1, ?)";
-db_insert_data($link, $sql, $data = [$new_lot_data]);
+db_insert_data($link, $sql, $data = $new_lot_data);
+}
+
+// Функция для проверки даты на соответствие формату
+function check_date_format($date) {
+    $result = false;
+    $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
+    if (preg_match($regexp, $date, $parts) && count($parts) == 4) {
+        $result = checkdate($parts[2], $parts[1], $parts[3]);
+    }
+    return $result;
 }

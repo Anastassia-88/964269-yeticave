@@ -12,13 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную $lot
     $lot = $_POST['lot'];
-    var_dump($lot);
-    var_dump($_FILES);
     // Затем определяем список полей, которые собираемся валидировать
     $required_fields = ['name', 'category', 'description', 'start_price', 'bet_step', 'dt_end'];
-    $dict = ['name' => 'Название лота', 'category' => 'Категория', 'description' => 'Описание лота',
-        'image' => 'Изображение лота', 'start_price' => 'Начальная цена лота', 'bet_step' => 'Шаг ставки',
-        'dt_end' => 'Дата завершения'];
     // Определяем пустой массив $errors, который будем заполнять ошибками валидации
     $errors = [];
     // Обходим массив $_POST. Здесь в переменной $key будет имя поля (из атрибута name).
@@ -45,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Проверка даты завершения
     //Содержимое поля «дата завершения» должно быть датой в формате «ДД.ММ.ГГГГ»
     //Указанная дата должна быть больше текущей даты, хотя бы на один день
-    if (!strtotime($lot['dt_end'])) {
+    if (!check_date_format($date = $lot['dt_end'])) {
         $errors['dt_end'] = 'Введите дату в формате «ДД.ММ.ГГГГ»';
     }
     elseif (strtotime($lot['dt_end']) - strtotime("tomorrow") < 0) {
@@ -66,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($file_type == "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'img/' . $path);
-            $lot['image'] = $path;
+            $lot['image'] = ('img/' . $path);
         }
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $lot
@@ -82,9 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок
     if (count($errors)) {
-        var_dump($errors);
-        $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'dict' => $dict,
-            'categories' => $categories]);
+        $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
     }
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
