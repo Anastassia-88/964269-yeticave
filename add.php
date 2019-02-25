@@ -64,20 +64,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
 
-
-        if ($file_type !== "image/jpeg" or "image/png") {
-            $errors['image'] = 'Загрузите картинку в формате jpg, jpeg или png';
+        if ($file_type == "image/jpeg" or $file_type == "image/png") {
+            move_uploaded_file($tmp_name, 'img/' . $path);
+            $lot['img'] = $path;
         }
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $lot
         else {
-            echo 1; move_uploaded_file($tmp_name, 'img/' . $path);
-            $lot['img'] = $path;
+            $errors['image'] = 'Загрузите картинку в формате jpg, jpeg или png';
         }
-
-
-
-
     }
     // Если файл не был загружен, добавляем ошибку
     else {$errors['image'] = 'Вы не загрузили файл';
