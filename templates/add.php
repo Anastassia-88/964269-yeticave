@@ -58,7 +58,7 @@
         <div class="form__item <?= $classname; ?>"> <!-- form__item--invalid -->
           <label for="lot-name">Наименование</label>
           <input id="lot-name" type="text" name="lot[name]" placeholder="Введите наименование лота"
-                 value="<?= $value; ?>" <!--required-->>
+                 value="<?= $value; ?>">
           <?php if (isset($errors['name'])): ?>
           <span class="form__error"><strong><?=  $errors['name']; ?></span>
           <?php endif; ?>
@@ -74,7 +74,7 @@
             <?php endforeach; ?>
           </select>
             <?php if (isset($errors['category'])): ?>
-            <span class="form__error"><strong>Выберите категорию</span>
+            <span class="form__error"><strong><?=  $errors['category']; ?></span>
             <?php endif; ?>
         </div>
         </div>
@@ -83,9 +83,9 @@
         $value = isset($lot['description']) ? $lot['description'] : ""; ?>
           <div class="form__item form__item--wide <?= $classname; ?>">
               <label for="message">Описание</label>
-              <textarea id="message" name="lot[description]" placeholder="Напишите описание лота"  required><?= $value; ?></textarea>
+              <textarea id="message" name="lot[description]" placeholder="Напишите описание лота"><?= $value; ?></textarea>
               <?php if (isset($errors['description'])): ?>
-              <span class="form__error"><strong>Напишите описание лота</span>
+              <span class="form__error"><strong><?=  $errors['description']; ?></span>
               <?php endif; ?>
           </div>
 
@@ -100,7 +100,7 @@
                   </div>
               </div>
               <div class="form__input-file">
-                  <input class="visually-hidden" type="file" id="photo2" value="<?= $value; ?>" name="image" required>
+                  <input class="visually-hidden" type="file" id="photo2" value="<?= $value; ?>" name="image">
                   <label for="photo2">
                       <span>+ Добавить</span>
                   </label>
@@ -116,9 +116,9 @@
           $value = isset($lot['start_price']) ? $lot['start_price'] : ""; ?>
           <div class="form__item form__item--small <?= $classname; ?>">
               <label for="lot-rate">Начальная цена</label>
-              <input id="lot-rate" type="text" name="lot[start_price]" placeholder="0" value="<?= $value; ?>"  required>
+              <input id="lot-rate" type="text" name="lot[start_price]" placeholder="0" value="<?= $value; ?>">
                   <?php if (isset($errors['start_price'])): ?>
-                      <span class="form__error">Введите начальную цену</span>
+                      <span class="form__error"><?=  $errors['start_price']; ?></span>
                   <?php endif; ?>
           </div>
 
@@ -126,9 +126,9 @@
         $value = isset($lot['bet_step']) ? $lot['bet_step'] : ""; ?>
         <div class="form__item form__item--small <?= $classname; ?>">
           <label for="lot-step">Шаг ставки</label>
-          <input id="lot-step" type="text" name="lot[bet_step]" placeholder="0" value="<?= $value; ?>"  required>
+          <input id="lot-step" type="text" name="lot[bet_step]" placeholder="0" value="<?= $value; ?>">
             <?php if (isset($errors['bet_step'])): ?>
-          <span class="form__error">Введите шаг ставки</span>
+          <span class="form__error"><?=  $errors['bet_step']; ?></span>
             <?php endif; ?>
         </div>
 
@@ -136,9 +136,9 @@
         $value = isset($lot['dt_end']) ? $lot['dt_end'] : ""; ?>
         <div class="form__item <?= $classname; ?>">
           <label for="lot-date">Дата окончания торгов</label>
-          <input class="form__input-date" id="lot-date" type="date" name="lot[dt_end]" value="<?= $value; ?>"  required>
+          <input class="form__input-date" id="lot-date" type="date" name="lot[dt_end]" value="<?= $value; ?>">
             <?php if (isset($errors['dt_end'])): ?>
-          <span class="form__error">Введите дату завершения торгов</span>
+          <span class="form__error"><?=  $errors['dt_end']; ?></span>
             <?php endif; ?>
         </div>
       </div>
