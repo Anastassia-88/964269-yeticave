@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($file_type == "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'img/' . $path);
-            $lot['img'] = $path;
+            $lot['image'] = $path;
         }
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $lot
