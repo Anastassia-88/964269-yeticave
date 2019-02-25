@@ -17,10 +17,10 @@ create table lots (
                           id int auto_increment primary key, -- первичный ключ
                           dt_add timestamp default current_timestamp, -- дата создания
                           name char(255) not null, -- название
-                          description text, -- описание
-                          image char(255), -- изображение
+                          description text not null, -- описание
+                          image char(255) not null, -- изображение
                           start_price decimal not null, -- начальная цена
-                          dt_end timestamp, -- дата завершения
+                          dt_end timestamp not null, -- дата завершения
                           bet_step decimal not null default 100, -- шаг ставки
                           user_id int not null, -- автор, связь с таблицей users
                           category_id int not null, -- категория, связь с таблицей categories
