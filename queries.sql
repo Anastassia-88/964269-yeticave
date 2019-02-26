@@ -13,14 +13,18 @@ values
 ("oleg.russak88@gmail.com", "OR", "123", "Моя почта - oleg.russak88@gmail.com");
 
 -- Существующий список объявлений
-insert into lots (name, image, start_price, user_id, category_id)
+insert into lots (name, image, start_price, user_id, category_id, description)
 values
-("2014 Rossignol District Snowboard", "img/lot-1.jpg", 10999, 1, 1),
-("DC Ply Mens 2016/2017 Snowboard", "img/lot-2.jpg", 159999, 1, 1),
-("Крепления Union Contact Pro 2015 года размер L/XL", "img/lot-3.jpg", 8000, 1, 2),
-("Ботинки для сноуборда DC Mutiny Charocal", "img/lot-4.jpg", 10999, 2, 3),
-("Куртка для сноуборда DC Mutiny Charocal", "img/lot-5.jpg", 7500, 2, 4),
-("Маска Oakley Canopy", "img/lot-6.jpg", 5400, 2, 6);
+("2014 Rossignol District Snowboard", "img/lot-1.jpg", 10999, 1, 1, "Рекомендую!"),
+("DC Ply Mens 2016/2017 Snowboard", "img/lot-2.jpg", 159999, 1, 1, "Легкий маневренный сноуборд, готовый дать жару в
+любом парке, растопив снег мощным щелчком и четкими дугами. Стекловолокно Bi-Ax, уложенное в двух направлениях,
+наделяет этот снаряд отличной гибкостью и отзывчивостью, а симметричная геометрия в сочетании с классическим прогибом
+кэмбер позволит уверенно держать высокие скорости. А если к концу катального дня сил совсем не останется, просто
+посмотрите на Вашу доску и улыбнитесь, крутая графика от Шона Кливера еще никого не оставляла равнодушным."),
+("Крепления Union Contact Pro 2015 года размер L/XL", "img/lot-3.jpg", 8000, 1, 2, "Рекомендую!"),
+("Ботинки для сноуборда DC Mutiny Charocal", "img/lot-4.jpg", 10999, 2, 3, "Рекомендую!"),
+("Куртка для сноуборда DC Mutiny Charocal", "img/lot-5.jpg", 7500, 2, 4, "Рекомендую!"),
+("Маска Oakley Canopy", "img/lot-6.jpg", 5400, 2, 6, "Рекомендую!");
 
 -- Добавьте пару ставок для любого объявления
 insert into bets (amount, user_id, lot_id)
