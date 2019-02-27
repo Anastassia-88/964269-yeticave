@@ -48,7 +48,7 @@
 
     <?php $classname_form = isset($errors) ? "form--invalid" : ""; ?>
     <form class="form form--add-lot container <?= $classname_form; ?>" action="add.php" method="post"
-          enctype="multipart/form-data"> <!-- form--invalid -->
+          enctype="multipart/form-data">
       <h2>Добавление лота</h2>
       <div class="form__container-two">
 
@@ -70,7 +70,8 @@
           <select id="category" name="lot[category]">
             <option value = "select">Выберите категорию</option>
             <?php foreach($categories as $category): ?>
-              <option value="<?= $category['id']; ?>" <? if($lot['category'] == $category['id']) {print ('selected');} ?>><?= $category['name']; ?></option>
+              <option value="<?= $category['id']; ?>" <? if($lot['category'] == $category['id'])
+              {print ('selected');} ?>><?= $category['name']; ?></option>
             <?php endforeach; ?>
           </select>
             <?php if (isset($errors['category'])): ?>

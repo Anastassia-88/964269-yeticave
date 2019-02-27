@@ -78,7 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок
     if (count($errors)) {
-        $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
+        $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors,
+            'categories' => $categories]);
     }
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
