@@ -52,9 +52,8 @@
               <?php endif; ?>
           </div>
 
-          <?php $classname = isset($errors['image']) ? "form__item--invalid" : "";              
-          $value = empty($lot['image']) ? "" : $lot['image']; ?>
-          <div class="form__item form__item--file <?= $classname; ?>"> <!-- form__item--uploaded -->
+          <?php $classname = isset($errors['image']) ? "form__item--invalid" : ""; ?>
+          <div class="form__item form__item--file <?= $classname; ?>">
               <label>Изображение</label>
               <div class="preview">
                   <button class="preview__remove" type="button">x</button>
@@ -63,7 +62,7 @@
                   </div>
               </div>
               <div class="form__input-file">
-                  <input class="visually-hidden" type="file" id="photo2" value="<?= $value; ?>" name="image">
+                  <input class="visually-hidden" type="file" id="photo2" name="image">
                   <label for="photo2">
                       <span>+ Добавить</span>
                   </label>

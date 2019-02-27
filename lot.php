@@ -19,5 +19,5 @@ else {
 }
 
 $layout_content = include_template('layout.php',
-    ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
+    ['content' => $page_content, 'categories' => $categories, 'title' => 'Просмотр лота']);
 print($layout_content);

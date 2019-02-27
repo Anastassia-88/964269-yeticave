@@ -40,15 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!count($errors) and $user) {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
-		}
-	}
-        else {
-			$errors['password'] = 'Неверный пароль';
-		}
+        } else {
+            $errors['password'] = 'Неверный пароль';
+        }
+    }
     else {
 		$errors['email'] = 'Такой пользователь не найден';
 	}
-    
+
     // Проверяем длину массива с ошибками.
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок
@@ -63,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
         }
     }
-}
 // Если метод не POST, значит форма не была отправлена
 // Проверяем существование сессии с пользователем
 // Сессия есть - значит пользователь залогинен и ему можно показать страницу приветствия
@@ -71,12 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 else {
     if (isset($_SESSION['user'])) {
-    $page_content = include_template('index.php', ['categories' => $categories, 'username' => $_SESSION['user']['name']]);
+        $page_content = include_template('index.php', ['categories' => $categories,
+            'username' => $_SESSION['user']['name']]);
+    } else {
+        $page_content = include_template('login.php', ['categories' => $categories]);
     }
-    else {
-    $page_content = include_template('login.php', ['categories' => $categories]);
-    }
+}
     
 $layout_content = include_template('layout.php',
-    ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
+    ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход на сайт']);
 print($layout_content);
