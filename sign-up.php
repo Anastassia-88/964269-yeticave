@@ -5,10 +5,7 @@ require_once 'functions.php';
 
 // запрос для получения массива категорий
 $categories = get_categories($link);
-
-$page_content = include_template('sign-up.php', ['categories' => $categories]);
-print($page_content);
-
+var_dump($_POST);
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -27,10 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = 'Поле не заполнено';
         }
     }
-    // Проверка для категорий
-    if ($lot['category'] == 'select'){
-        $errors['category'] = 'Поле не заполнено';
-
+    // Проверим, что указанный email уже не используется другим пользователем
+    if (empty($errors)){
+        $email = mysqli_real_escape_string($link, $sign_up_form['email']);
+        $sql = "SELECT id FROM users WHERE email = '$email'";
+        $res = mysqli_query($link, $sql);
+        // Если запрос вернул больше нуля записей, значит такой поьзователь уже существует
+        if (mysqli_num_rows($res) > 0) {
+            $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
+        }
     }
     // Проверим, был ли загружен файл. Поле для загрузки файла в форме называется 'image',
     // поэтому нам следует искать в массиве $_FILES одноименный ключ.
@@ -81,5 +83,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 else {
     $page_content = include_template('sign-up.php', ['categories' => $categories]);
 }
-
+var_dump($errors);
 print($page_content);
