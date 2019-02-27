@@ -71,12 +71,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Отправляем форму регистрации в базу данных
+        // Чтобы не хранить пароль в открытом виде преобразуем его в хеш
+        $password = password_hash($sign_up_form['password'], PASSWORD_DEFAULT);
         $new_user_data = [$sign_up_form['name'], $sign_up_form['email'],
             $sign_up_form['image'], $sign_up_form['password'],
             $sign_up_form['message']];
         add_user($link, $new_user_data);
         // Перенаправляем пользователя на страницу входа
         header("Location: login.php");
+        exit();
     }
 }
 
