@@ -58,15 +58,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
-        // Перенаправляем пользователя на страницу входа
-        header("Location: /index.php");
+        // Перенаправляем пользователя
+        header("Location: /login.php");
         exit();
         }
     }
 }
-// Если метод не POST, значит форма не была отправлена и валидировать ничего не надо,
-// поэтому просто подключаем шаблон показа формы
+// Если метод не POST, значит форма не была отправлена
+// Проверяем существование сессии с пользователем
+// Сессия есть - значит пользователь залогинен и ему можно показать страницу приветствия
+// Сессии нет - показываем форму для входа на сайт
+
 else {
+    if (isset($_SESSION['user'])) {
+    $page_content = include_template('index.php', ['categories' => $categories, 'username' => $_SESSION['user']['name']]);
+    }
+    else {
     $page_content = include_template('login.php', ['categories' => $categories]);
-}
+    }
+    
 print($page_content);
