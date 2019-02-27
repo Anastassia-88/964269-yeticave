@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $sign_up_form['message']];
         add_user($link, $new_user_data);
         // Перенаправляем пользователя на страницу входа
-        header("Location: login.php");
+        header("Location: /login.php");
         exit();
     }
 }
