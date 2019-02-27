@@ -45,7 +45,7 @@
             </ul>
         </nav>
         <?php $classname_form = isset($errors) ? "form--invalid" : ""; ?>
-        <form class="form container" action="https://echo.htmlacademy.ru" method="post" enctype="multipart/form-data">
+        <form class="form container" action="sign-up.php" method="post" enctype="multipart/form-data">
             <h2>Регистрация нового аккаунта</h2>
 
             <?php $classname = isset($errors['email']) ? "form__item--invalid" : "";
@@ -55,7 +55,7 @@
                 <label for="email">E-mail*</label>
                 <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $value; ?>">
                 <?php if (isset($sign_up_form['email'])): ?>
-                <span class="form__error">Введите <?= $errors['email']; ?></span>
+                <span class="form__error"><?= $errors['email']; ?></span>
                 <?php endif; ?>
             </div>
 
