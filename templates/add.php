@@ -90,8 +90,8 @@
               <?php endif; ?>
           </div>
 
-          <?php $classname = isset($errors['image']) ? "form__item--invalid" : "";
-          $value = isset($lot['image']) ? $lot['image'] : ""; ?>
+          <?php $classname = isset($errors['image']) ? "form__item--invalid" : "";              
+          $value = empty($lot['image']) ? "" : $lot['image']; ?>
           <div class="form__item form__item--file <?= $classname; ?>"> <!-- form__item--uploaded -->
               <label>Изображение</label>
               <div class="preview">
