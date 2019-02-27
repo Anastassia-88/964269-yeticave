@@ -55,9 +55,7 @@
                 <?php endif; ?>
             </div>
 
-            <?php $classname = isset($errors['image']) ? "form__item--invalid" : "";
-            // Возвращаем введенные значения в форму
-            $value = empty($sign_up_form['image']) ? "" : $sign_up_form['image']; ?>
+            <?php $classname = isset($errors['image']) ? "form__item--invalid" : ""; ?>
             <div class="form__item form__item--file form__item--last <?= $classname; ?>">
                 <label>Аватар</label>
                 <div class="preview">
@@ -67,7 +65,7 @@
                     </div>
                 </div>
                 <div class="form__input-file">
-                    <input class="visually-hidden" type="file" id="photo2" name="image" value="<?= $value; ?>">
+                    <input class="visually-hidden" type="file" id="photo2" name="image">
                     <label for="photo2">
                         <span>+ Добавить</span>
                     </label>
