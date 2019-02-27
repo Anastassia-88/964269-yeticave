@@ -5,7 +5,7 @@ require_once 'functions.php';
 
 // запрос для получения массива категорий
 $categories = get_categories($link);
-var_dump($_POST);
+
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную
     $sign_up_form = $_POST;
     // Затем определяем список полей, которые собираемся валидировать
-    $required_fields = ['name', 'email', 'password', 'message', 'image'];
+    $required_fields = ['name', 'email', 'password', 'message'];
     // Определяем пустой массив $errors, который будем заполнять ошибками валидации
     $errors = [];
     // Обходим массив $_POST. Здесь в переменной $key будет имя поля (из атрибута name).
@@ -65,12 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок
     if (count($errors)) {
-        $page_content = include_template('sign-up.php', ['sign_up_form' => $sign_up_form, 'errors' => $errors, 'categories' => $categories]);
+        $page_content = include_template('sign-up.php', ['sign_up_form' => $sign_up_form, 'errors' => $errors,
+            'categories' => $categories]);
     }
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Отправляем форму регистрации в базу данных
-        $new_user_data = [$sign_up_form['dt_add'], $sign_up_form['name'], $sign_up_form['email'], $sign_up_form['image'], $sign_up_form['password'],
+        $new_user_data = [$sign_up_form['name'], $sign_up_form['email'],
+            $sign_up_form['image'], $sign_up_form['password'],
             $sign_up_form['message']];
         add_user($link, $new_user_data);
         // Перенаправляем пользователя на страницу входа
@@ -83,5 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 else {
     $page_content = include_template('sign-up.php', ['categories' => $categories]);
 }
-var_dump($errors);
 print($page_content);
+
+
+

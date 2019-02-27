@@ -54,7 +54,7 @@
             <div class="form__item <?= $classname; ?>">
                 <label for="email">E-mail*</label>
                 <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $value; ?>">
-                <?php if (isset($sign_up_form['email'])): ?>
+                <?php if (isset($errors['email'])): ?>
                 <span class="form__error"><?= $errors['email']; ?></span>
                 <?php endif; ?>
             </div>
@@ -65,7 +65,7 @@
             <div class="form__item <?= $classname; ?>">
                 <label for="password">Пароль*</label>
                 <input id="password" type="text" name="password" placeholder="Введите пароль" value="<?= $value; ?>">
-                <?php if (isset($sign_up_form['password'])): ?>
+                <?php if (isset($errors['password'])): ?>
                 <span class="form__error"><?= $errors['password']; ?></span>
                 <?php endif; ?>
             </div>
@@ -76,7 +76,7 @@
             <div class="form__item <?= $classname; ?>">
                 <label for="name">Имя*</label>
                 <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= $value; ?>">
-                <?php if (isset($sign_up_form['name'])): ?>
+                <?php if (isset($errors['name'])): ?>
                 <span class="form__error"><?= $errors['name']; ?></span>
                 <?php endif; ?>
             </div>
@@ -87,12 +87,10 @@
             <div class="form__item <?= $classname; ?>">
                 <label for="message">Контактные данные*</label>
                 <textarea id="message" name="message" placeholder="Напишите как с вами связаться"><?= $value; ?></textarea>
-                <?php if (isset($sign_up_form['message'])): ?>
+                <?php if (isset($errors['message'])): ?>
                 <span class="form__error"><?= $errors['message']; ?></span>
                 <?php endif; ?>
             </div>
-
-
 
             <?php $classname = isset($errors['image']) ? "form__item--invalid" : "";
             // Возвращаем введенные значения в форму
@@ -102,16 +100,16 @@
                 <div class="preview">
                     <button class="preview__remove" type="button">x</button>
                     <div class="preview__img">
-                        <img src="img/avatar.jpg" width="113" height="113" alt="Ваш аватар" name="image">
+                        <img src="img/avatar.jpg" width="113" height="113" alt="Ваш аватар">
                     </div>
                 </div>
                 <div class="form__input-file">
-                    <input class="visually-hidden" type="file" id="photo2"  value="<?= $value; ?>">
+                    <input class="visually-hidden" type="file" id="photo2" name="image" value="<?= $value; ?>">
                     <label for="photo2">
                         <span>+ Добавить</span>
                     </label>
                 </div>
-                <?php if (isset($sign_up_form['image'])): ?>
+                <?php if (isset($errors['image'])): ?>
                     <span class="form__error"><?= $errors['image']; ?></span>
                 <?php endif; ?>
             </div>
