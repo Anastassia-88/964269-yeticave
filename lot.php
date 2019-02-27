@@ -17,4 +17,7 @@ else {
     $page_content = include_template('error.php', ['categories' => $categories]);
     http_response_code (404);
 }
-print($page_content);
+
+$layout_content = include_template('layout.php',
+    ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
+print($layout_content);
