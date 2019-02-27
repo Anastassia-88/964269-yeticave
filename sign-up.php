@@ -53,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $sign_up_form
         if ($file_type == "image/jpeg" or $file_type == "image/png") {
-            move_uploaded_file($tmp_name, 'img/' . $path);
-            $lot['image'] = ('img/' . $path);
+            move_uploaded_file($tmp_name, 'uploads/' . $path);
+            $lot['image'] = ('uploads/' . $path);
         }
         // Если файл не соответствует ожидаемому типу, добавляем ошибку
         else {
