@@ -24,10 +24,10 @@
     <nav class="user-menu">
       <ul class="user-menu__list">
         <li class="user-menu__item">
-          <a href="sign-up.html">Регистрация</a>
+          <a href="sign-up.php">Регистрация</a>
         </li>
         <li class="user-menu__item">
-          <a href="login.html">Вход</a>
+          <a href="login.php">Вход</a>
         </li>
       </ul>
     </nav>
@@ -55,7 +55,7 @@
         <?php $classname = isset($errors['name']) ? "form__item--invalid" : "";
         // Возвращаем введенные значения в форму
         $value = isset($lot['name']) ? $lot['name'] : ""; ?>
-        <div class="form__item <?= $classname; ?>"> <!-- form__item--invalid -->
+        <div class="form__item <?= $classname; ?>">
           <label for="lot-name">Наименование</label>
           <input id="lot-name" type="text" name="lot[name]" placeholder="Введите наименование лота"
                  value="<?= $value; ?>">

@@ -7,7 +7,7 @@ values
 ('Доски и лыжи'), ('Крепления'), ('Ботинки'), ('Одежда'), ('Инструменты'), ('Разное');
 
 -- Придумайте пару пользователей
-insert into users (email, name, password, contacts)
+insert into users (email, name, password, message)
 values
 ("anastassia.russak@gmail.com", "AR", "123", "Моя почта - anastassia.russak@gmail.com"),
 ("oleg.russak88@gmail.com", "OR", "123", "Моя почта - oleg.russak88@gmail.com");

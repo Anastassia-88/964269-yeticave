@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 // Подключение базы данных
 $link = mysqli_connect("localhost", "root", "", "yeticave");
 // Сообщение при ошиибке подключения;

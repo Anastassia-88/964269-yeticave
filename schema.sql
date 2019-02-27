@@ -41,8 +41,8 @@ create table users (
                           email char(255) not null unique, -- email
                           name char(255) not null, -- имя
                           password char(255) not null, -- пароль
-                          avatar text, -- аватар
-                          contacts text not null -- контакты
+                          image text, -- аватар
+                          message text not null -- контакты
 );
 
 -- добавляем уникальные индексы полям, где должны быть только уникальные значения
