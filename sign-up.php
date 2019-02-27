@@ -77,10 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $new_user_data = [$sign_up_form['name'], $sign_up_form['email'],
             $sign_up_form['image'], $sign_up_form['password'],
             $sign_up_form['message']];
-        add_user($link, $new_user_data);
+        $result = add_user($link, $new_user_data);
         // Перенаправляем пользователя на страницу входа
-        header("Location: /login.php");
-        exit();
+        if ($result) {
+            header("Location: /login.php");
+            exit();
+        }
     }
 }
 
