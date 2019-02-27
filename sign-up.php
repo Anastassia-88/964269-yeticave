@@ -24,6 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = 'Поле не заполнено';
         }
     }
+    // Проверим, что значение из поля «email» действительно является валидным E-mail адресом 
+    if (filter_var($sign_up_form['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors[$email] = 'Введите валидный E-mail адрес';
+    }
     // Проверим, что указанный email уже не используется другим пользователем
     if (empty($errors)){
         $email = mysqli_real_escape_string($link, $sign_up_form['email']);
