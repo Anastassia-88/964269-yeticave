@@ -94,7 +94,7 @@
 
             <?php $classname = isset($errors['image']) ? "form__item--invalid" : "";
             // Возвращаем введенные значения в форму
-            $value = isset($sign_up_form['image']) ? $sign_up_form['image'] : ""; ?>
+            $value = empty($sign_up_form['image']) ? "" : $sign_up_form['image']; ?>
             <div class="form__item form__item--file form__item--last <?= $classname; ?>">
                 <label>Аватар</label>
                 <div class="preview">
