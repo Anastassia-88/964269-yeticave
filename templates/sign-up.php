@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?= htmlspecialchars($lot['name']); ?></title>
+    <title>Регистрация</title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 </head>
@@ -20,14 +20,14 @@
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
-            <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
+            <a class="main-header__add-lot button" href="add-lot.php">Добавить лот</a>
             <nav class="user-menu">
                 <ul class="user-menu__list">
                     <li class="user-menu__item">
-                        <a href="sign-up.html">Регистрация</a>
+                        <a href="sign-up.php">Регистрация</a>
                     </li>
                     <li class="user-menu__item">
-                        <a href="login.html">Вход</a>
+                        <a href="login.php">Вход</a>
                     </li>
                 </ul>
             </nav>
@@ -37,104 +37,88 @@
     <main>
         <nav class="nav">
             <ul class="nav__list container">
-                <?php foreach ($categories as $category): ?>
-                    <li class="nav__item">
-                        <a href="all-lots.html"><?= $category['name']; ?></a>
-                    </li>
-                <?php endforeach; ?>
+            <?php foreach($categories as $category): ?>
+                <li class="nav__item">
+                    <a href="all-lots.html"><?= $category['name']; ?></a>
+                </li>
+            <?php endforeach; ?>
             </ul>
         </nav>
-        <section class="lot-item container">
-                <h2><?= htmlspecialchars($lot['name']); ?></h2>
-                <div class="lot-item__content">
-                    <div class="lot-item__left">
-                        <div class="lot-item__image">
-                            <img src="<?= htmlspecialchars($lot['image']); ?>" width="730" height="548" alt="<?= htmlspecialchars($lot['name']); ?>">
-                        </div>
-                        <p class="lot-item__category">Категория: <span><?= $lot['category']; ?></span></p>
-                        <p class="lot-item__description"><?= htmlspecialchars($lot['description']); ?></p>
-                    </div>
-                    <div class="lot-item__right">
-                        <div class="lot-item__state">
-                            <div class="lot-item__timer timer">
-                                <?= get_time($lot['dt_add']); ?>
-                            </div>
-                            <div class="lot-item__cost-state">
-                                <div class="lot-item__rate">
-                                    <span class="lot-item__amount">Текущая цена</span>
-                                    <span class="lot-item__cost">10 999</span>
-                                </div>
-                                <div class="lot-item__min-cost">
-                                    Мин. ставка <span><?= price_format($lot['start_price']); ?></span>
-                                </div>
-                            </div>
-                            <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
-                                <p class="lot-item__form-item form__item form__item--invalid">
-                                    <label for="cost">Ваша ставка</label>
-                                    <input id="cost" type="text" name="cost" placeholder="12 000">
-                                    <span class="form__error">Введите наименование лота</span>
-                                </p>
-                                <button type="submit" class="button">Сделать ставку</button>
-                            </form>
-                        </div>
-                        <div class="history">
-                            <h3>История ставок (<span>10</span>)</h3>
-                            <table class="history__list">
-                                <tr class="history__item">
-                                    <td class="history__name">Иван</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">5 минут назад</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Константин</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">20 минут назад</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Евгений</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">Час назад</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Игорь</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">19.03.17 в 08:21</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Енакентий</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">19.03.17 в 13:20</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Семён</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">19.03.17 в 12:20</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Илья</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">19.03.17 в 10:20</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Енакентий</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">19.03.17 в 13:20</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Семён</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">19.03.17 в 12:20</td>
-                                </tr>
-                                <tr class="history__item">
-                                    <td class="history__name">Илья</td>
-                                    <td class="history__price">10 999 р</td>
-                                    <td class="history__time">19.03.17 в 10:20</td>
-                                </tr>
-                            </table>
-                        </div>
+        <?php $classname_form = isset($errors) ? "form--invalid" : ""; ?>
+        <form class="form container" action="sign-up.php" method="post" enctype="multipart/form-data">
+            <h2>Регистрация нового аккаунта</h2>
+
+            <?php $classname = isset($errors['email']) ? "form__item--invalid" : "";
+            // Возвращаем введенные значения в форму
+            $value = isset($sign_up_form['email']) ? $sign_up_form['email'] : ""; ?>
+            <div class="form__item <?= $classname; ?>">
+                <label for="email">E-mail*</label>
+                <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $value; ?>">
+                <?php if (isset($errors['email'])): ?>
+                <span class="form__error"><?= $errors['email']; ?></span>
+                <?php endif; ?>
+            </div>
+
+            <?php $classname = isset($errors['password']) ? "form__item--invalid" : "";
+            // Возвращаем введенные значения в форму
+            $value = isset($sign_up_form['password']) ? $sign_up_form['password'] : ""; ?>
+            <div class="form__item <?= $classname; ?>">
+                <label for="password">Пароль*</label>
+                <input id="password" type="text" name="password" placeholder="Введите пароль" value="<?= $value; ?>">
+                <?php if (isset($errors['password'])): ?>
+                <span class="form__error"><?= $errors['password']; ?></span>
+                <?php endif; ?>
+            </div>
+
+            <?php $classname = isset($errors['name']) ? "form__item--invalid" : "";
+            // Возвращаем введенные значения в форму
+            $value = isset($sign_up_form['name']) ? $sign_up_form['name'] : ""; ?>
+            <div class="form__item <?= $classname; ?>">
+                <label for="name">Имя*</label>
+                <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= $value; ?>">
+                <?php if (isset($errors['name'])): ?>
+                <span class="form__error"><?= $errors['name']; ?></span>
+                <?php endif; ?>
+            </div>
+
+            <?php $classname = isset($errors['message']) ? "form__item--invalid" : "";
+            // Возвращаем введенные значения в форму
+            $value = isset($sign_up_form['message']) ? $sign_up_form['message'] : ""; ?>
+            <div class="form__item <?= $classname; ?>">
+                <label for="message">Контактные данные*</label>
+                <textarea id="message" name="message" placeholder="Напишите как с вами связаться"><?= $value; ?></textarea>
+                <?php if (isset($errors['message'])): ?>
+                <span class="form__error"><?= $errors['message']; ?></span>
+                <?php endif; ?>
+            </div>
+
+            <?php $classname = isset($errors['image']) ? "form__item--invalid" : "";
+            // Возвращаем введенные значения в форму
+            $value = empty($sign_up_form['image']) ? "" : $sign_up_form['image']; ?>
+            <div class="form__item form__item--file form__item--last <?= $classname; ?>">
+                <label>Аватар</label>
+                <div class="preview">
+                    <button class="preview__remove" type="button">x</button>
+                    <div class="preview__img">
+                        <img src="img/avatar.jpg" width="113" height="113" alt="Ваш аватар">
                     </div>
                 </div>
-        </section>
+                <div class="form__input-file">
+                    <input class="visually-hidden" type="file" id="photo2" name="image" value="<?= $value; ?>">
+                    <label for="photo2">
+                        <span>+ Добавить</span>
+                    </label>
+                </div>
+                <?php if (isset($errors['image'])): ?>
+                    <span class="form__error"><?= $errors['image']; ?></span>
+                <?php endif; ?>
+            </div>
+
+            <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
+
+            <button type="submit" class="button">Зарегистрироваться</button>
+            <a class="text-link" href="login.php">Уже есть аккаунт</a>
+        </form>
     </main>
 
 </div>
@@ -142,11 +126,11 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach ($categories as $category): ?>
-                <li class="nav__item">
-                    <a href="all-lots.html"><?= $category['name']; ?></a>
-                </li>
-            <?php endforeach; ?>
+        <?php foreach($categories as $category): ?>
+            <li class="nav__item">
+                <a href="all-lots.html"><?= $category['name']; ?></a>
+            </li>
+        <?php endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">

@@ -43,7 +43,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     return $stmt;
 }
 
-// Получение записей из БД
+// Получение записей из БД в виде двумерного ассоциативного массива (несколько лотов)
 function db_fetch_data($link, $sql, $data = []) {
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -51,6 +51,18 @@ function db_fetch_data($link, $sql, $data = []) {
     $res = mysqli_stmt_get_result($stmt);
     if ($res) {
         $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+    return $result;
+}
+
+// Получение записей из БД в виде одномерного неассоциативного массива (один лот)
+function db_fetch_data_1($link, $sql, $data = []) {
+    $result = [];
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    if ($res) {
+        $result = mysqli_fetch_assoc($res);
     }
     return $result;
 }
@@ -110,7 +122,8 @@ function get_lots($link){
     join categories c
     on l.category_id = c.id
     where winner_id is null
-    order by l.id desc;";
+    order by l.id desc
+    LIMIT 9;";
     $lots = db_fetch_data($link, $sql);
     return $lots;
 }
@@ -118,11 +131,35 @@ function get_lots($link){
 // Вывод лота по id
 function get_lot($link, $lot_id) {
     $sql = "select
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
     from lots l
     join categories c
     on l.category_id = c.id
     where l.id = ?;";
-    $lot = db_fetch_data($link, $sql,  $data = [$lot_id]);
+    $lot = db_fetch_data_1($link, $sql, $data = [$lot_id]);
     return $lot;
+}
+
+// Добавление нового лота
+function add_lot($link, $new_lot_data) {
+$sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
+values (now(), ?, ?, ?, ?, ?, ?, 1, ?)";
+db_insert_data($link, $sql, $data = $new_lot_data);
+}
+
+// Функция для проверки даты на соответствие формату
+function check_date_format($date) {
+    $result = false;
+    $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
+    if (preg_match($regexp, $date, $parts) && count($parts) == 4) {
+        $result = checkdate($parts[2], $parts[1], $parts[3]);
+    }
+    return $result;
+}
+
+// Добавление нового пользователя
+function add_user($link, $new_user_data) {
+    $sql = "insert into users (dt_add, name, email, image, password, message)
+values (now(), ?, ?, ?, ?, ?)";
+    db_insert_data($link, $sql, $data = $new_user_data);
 }
