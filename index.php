@@ -17,7 +17,7 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
     'username' => $_SESSION['user']['name'],
-    'title' => 'YetiCave. Главная'
+    'title' => 'YetiCave'
     ]);
 
 print($layout_content);
