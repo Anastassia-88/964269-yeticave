@@ -7,7 +7,8 @@
         <?php endforeach; ?>
     </ul>
 </nav>
-<form class="form container" action="login.php" method="post"> <!-- form--invalid -->
+<?php $classname_form = isset($errors) ? "form--invalid" : ""; ?>
+<form class="form container <?= $classname_form; ?>" action="login.php" method="post"> <!-- form--invalid -->
     <h2>Вход</h2>
 
     <?php $classname = isset($errors['email']) ? "form__item--invalid" : "";
