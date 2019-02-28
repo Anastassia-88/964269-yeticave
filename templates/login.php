@@ -8,7 +8,7 @@
     </ul>
 </nav>
 <?php $classname_form = isset($errors) ? "form--invalid" : ""; ?>
-<form class="form container <?= $classname_form; ?>" action="login.php" method="post"> <!-- form--invalid -->
+<form class="form container <?= $classname_form; ?>" action="login.php" method="post">
     <h2>Вход</h2>
 
     <?php $classname = isset($errors['email']) ? "form__item--invalid" : "";

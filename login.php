@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
     if (!count($errors) and $user) {
-        if (password_verify($form['password'], $user['password'])) {
+        if (password_verify($login_form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         } else {
             $errors['password'] = 'Неверный пароль';
@@ -75,10 +75,6 @@ else {
         $page_content = include_template('login.php', ['categories' => $categories]);
     }
 }
-
-
-var_dump($_POST);
-
 
 $layout_content = include_template('layout.php',
     ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход на сайт']);
