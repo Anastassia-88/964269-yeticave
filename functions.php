@@ -143,7 +143,7 @@ function get_lot($link, $lot_id) {
 // Добавление нового лота
 function add_lot($link, $new_lot_data) {
 $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
-values (now(), ?, ?, ?, ?, ?, ?, 1, ?)";
+values (now(), ?, ?, ?, ?, ?, ?, ?, ?)";
 db_insert_data($link, $sql, $data = $new_lot_data);
 }
 
