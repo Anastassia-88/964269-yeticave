@@ -52,12 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок
     if (count($errors)) {
-        $page_content = include_template('login.php', ['login_form' => $login_form, 'errors' => $errors,
-            'categories' => $categories]);
+        $page_content = include_template('login.php', [
+            'login_form' => $login_form,
+            'errors' => $errors,
+            'categories' => $categories
+        ]);
     }
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
-        // Перенаправляем пользователя
+        // Перенаправляем пользователя на главную страницу
         header("Location: /login.php");
         exit();
     }
@@ -69,13 +72,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 else {
     if (isset($_SESSION['user'])) {
-        $page_content = include_template('index.php', ['categories' => $categories,
-            'username' => $_SESSION['user']['name']]);
+        $page_content = include_template('index.php', [
+            'categories' => $categories,
+            'lots' => $lots,
+            'username' => $_SESSION['user']['name']
+        ]);
+
+
+
     } else {
-        $page_content = include_template('login.php', ['categories' => $categories]);
+        $page_content = include_template('login.php', [
+            'categories' => $categories
+        ]);
     }
 }
 
-$layout_content = include_template('layout.php',
-    ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход на сайт']);
+$layout_content = include_template('layout.php', [
+    'content' => $page_content,
+    'categories' => $categories,
+    'username' => $_SESSION['user']['name'],
+    'title' => 'Вход на сайт']);
+
 print($layout_content);
