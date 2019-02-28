@@ -88,6 +88,6 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
     'username' => $_SESSION['user']['name'],
-    'title' => 'Вход на сайт']);
+    'title' => 'YetiCave']);
 
 print($layout_content);
