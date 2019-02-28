@@ -159,7 +159,7 @@ function check_date_format($date) {
 
 // Добавление нового пользователя
 function add_user($link, $new_user_data) {
-    $sql = "insert into users (dt_add, name, email, image, password, message)
-values (now(), ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO users (dt_add, name, email, image, password, message)
+VALUES (NOW(), ?, ?, ?, ?, ?)";
     db_insert_data($link, $sql, $data = $new_user_data);
 }
