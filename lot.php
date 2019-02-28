@@ -14,7 +14,7 @@ if ($lot) {
 }
 else {
 
-    $page_content = include_template('error.php', ['categories' => $categories]);
+    $page_content = include_template('error_404.php', ['categories' => $categories]);
     http_response_code (404);
 }
 

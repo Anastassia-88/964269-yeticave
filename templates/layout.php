@@ -9,7 +9,6 @@
 <body>
 <div class="page-wrapper">
 
-
     <header class="main-header">
         <div class="main-header__container container">
             <h1 class="visually-hidden">YetiCave</h1>
@@ -20,7 +19,8 @@
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
-            <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
+                <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
+
             <nav class="user-menu">
                 <?php if (isset($_SESSION['user'])): ?>
                     <div class="user-menu__logged">
@@ -47,7 +47,7 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <!--заполните этот список из массива категорий-->
+            <!--Массив категорий-->
             <?php foreach ($categories as $category) : ?>
                 <li class="nav__item">
                     <a href="pages/all-lots.html"><?= $category['name']; ?></a>
