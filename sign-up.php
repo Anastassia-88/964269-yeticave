@@ -90,8 +90,12 @@ else {
     $page_content = include_template('sign-up.php', ['categories' => $categories]);
 }
 
-$layout_content = include_template('layout.php',
-    ['content' => $page_content, 'categories' => $categories, 'title' => 'Регистрация']);
+$layout_content = include_template('layout.php', [
+    'content' => $page_content, 
+    'categories' => $categories, 
+    'username' => $_SESSION['user']['name'],
+    'title' => 'Регистрация'
+]);
 
 print($layout_content);
 
