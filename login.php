@@ -74,11 +74,8 @@ else {
     if (isset($_SESSION['user'])) {
         $page_content = include_template('index.php', [
             'categories' => $categories,
-            'lots' => $lots,
-            'username' => $_SESSION['user']['name']
+            'lots' => $lots
         ]);
-
-
 
     } else {
         $page_content = include_template('login.php', [
