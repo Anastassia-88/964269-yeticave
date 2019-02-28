@@ -15,7 +15,7 @@
             $value = isset($sign_up_form['email']) ? $sign_up_form['email'] : ""; ?>
             <div class="form__item <?= $classname; ?>">
                 <label for="email">E-mail*</label>
-                <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $value; ?>">
+                <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $value; ?>" required>
                 <?php if (isset($errors['email'])): ?>
                 <span class="form__error"><?= $errors['email']; ?></span>
                 <?php endif; ?>
@@ -24,7 +24,7 @@
             <?php $classname = isset($errors['password']) ? "form__item--invalid" : ""; ?>
             <div class="form__item form__item--last <?= $classname; ?>">
                 <label for="password">Пароль*</label>
-                <input id="password" type="password" name="password" placeholder="Введите пароль">
+                <input id="password" type="password" name="password" placeholder="Введите пароль" required>
                 <?php if (isset($errors['password'])): ?>
                 <span class="form__error"><?= $errors['password']; ?></span>
                 <?php endif; ?>

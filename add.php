@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // поэтому нам следует искать в массиве $_FILES одноименный ключ.
     // Если таковой найден, то мы можем получить имя загруженного файла
 
-    if (isset($_FILES['image']['name'])) {
+    if (!empty($_FILES['image']['name'])) {
         $tmp_name = $_FILES['image']['tmp_name'];
         $path = $_FILES['image']['name'];
 

@@ -16,7 +16,7 @@
             $value = isset($sign_up_form['email']) ? $sign_up_form['email'] : ""; ?>
             <div class="form__item <?= $classname; ?>">
                 <label for="email">E-mail*</label>
-                <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $value; ?>">
+                <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $value; ?>" required>
                 <?php if (isset($errors['email'])): ?>
                 <span class="form__error"><?= $errors['email']; ?></span>
                 <?php endif; ?>
@@ -27,7 +27,7 @@
             $value = isset($sign_up_form['password']) ? $sign_up_form['password'] : ""; ?>
             <div class="form__item <?= $classname; ?>">
                 <label for="password">Пароль*</label>
-                <input id="password" type="text" name="password" placeholder="Введите пароль" value="<?= $value; ?>">
+                <input id="password" type="text" name="password" placeholder="Введите пароль" value="<?= $value; ?>" required>
                 <?php if (isset($errors['password'])): ?>
                 <span class="form__error"><?= $errors['password']; ?></span>
                 <?php endif; ?>
@@ -38,7 +38,7 @@
             $value = isset($sign_up_form['name']) ? $sign_up_form['name'] : ""; ?>
             <div class="form__item <?= $classname; ?>">
                 <label for="name">Имя*</label>
-                <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= $value; ?>">
+                <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= $value; ?>" required>
                 <?php if (isset($errors['name'])): ?>
                 <span class="form__error"><?= $errors['name']; ?></span>
                 <?php endif; ?>
@@ -49,13 +49,15 @@
             $value = isset($sign_up_form['message']) ? $sign_up_form['message'] : ""; ?>
             <div class="form__item <?= $classname; ?>">
                 <label for="message">Контактные данные*</label>
-                <textarea id="message" name="message" placeholder="Напишите как с вами связаться"><?= $value; ?></textarea>
+                <textarea id="message" name="message" placeholder="Напишите как с вами связаться" required><?= $value; ?></textarea>
                 <?php if (isset($errors['message'])): ?>
                 <span class="form__error"><?= $errors['message']; ?></span>
                 <?php endif; ?>
             </div>
 
-            <?php $classname = isset($errors['image']) ? "form__item--invalid" : ""; ?>
+            <?php $classname = isset($errors['image']) ? "form__item--invalid" : "";
+            // Возвращаем введенные значения в форму
+            $value = isset($sign_up_form['image']) ? $sign_up_form['image'] : ""; ?>
             <div class="form__item form__item--file form__item--last <?= $classname; ?>">
                 <label>Аватар</label>
                 <div class="preview">
@@ -65,7 +67,7 @@
                     </div>
                 </div>
                 <div class="form__input-file">
-                    <input class="visually-hidden" type="file" id="photo2" name="image">
+                    <input class="visually-hidden" type="file" id="photo2" name="image" value="<?= $value; ?>">
                     <label for="photo2">
                         <span>+ Добавить</span>
                     </label>

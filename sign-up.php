@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     // Проверим, что значение из поля «email» действительно является валидным E-mail адресом 
-    if (filter_var($sign_up_form['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors[$email] = 'Введите валидный E-mail адрес';
+    if (!filter_var($sign_up_form['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Введите валидный E-mail адрес';
     }
     // Проверим, что указанный email уже не используется другим пользователем
     if (empty($errors)){
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // поэтому нам следует искать в массиве $_FILES одноименный ключ.
     // Если таковой найден, то мы можем получить имя загруженного файла
 
-    if (isset($_FILES['image']['name'])) {
+    if (!empty($_FILES['image']['name'])) {
         $tmp_name = $_FILES['image']['tmp_name'];
         $path = $_FILES['image']['name'];
 
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // а также добавляем путь к загруженному изображению в массив $sign_up_form
         if ($file_type == "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'uploads/' . $path);
-            $lot['image'] = ('uploads/' . $path);
+            $sign_up_form['image'] = ('uploads/' . $path);
         }
         // Если файл не соответствует ожидаемому типу, добавляем ошибку
         else {
@@ -75,14 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Чтобы не хранить пароль в открытом виде преобразуем его в хеш
         $password = password_hash($sign_up_form['password'], PASSWORD_DEFAULT);
         $new_user_data = [$sign_up_form['name'], $sign_up_form['email'],
-            $sign_up_form['image'], $sign_up_form['password'],
+            $sign_up_form['image'], $password,
             $sign_up_form['message']];
-        $result = add_user($link, $new_user_data);
+        add_user ($link, $new_user_data);
         // Перенаправляем пользователя на страницу входа
-        if ($result) {
-            header("Location: /login.php");
-            exit();
-        }
+        header("Location: /index.php");
+        exit();
     }
 }
 
@@ -93,7 +91,8 @@ else {
 }
 
 $layout_content = include_template('layout.php',
-    ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
+    ['content' => $page_content, 'categories' => $categories, 'title' => 'Регистрация']);
+
 print($layout_content);
 
 
