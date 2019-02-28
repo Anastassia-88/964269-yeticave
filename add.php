@@ -93,8 +93,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Если метод не POST, значит форма не была отправлена и валидировать ничего не надо,
-// поэтому просто подключаем шаблон показа формы
+// Если метод не POST, значит форма не была отправлена и валидировать ничего не надо
+// Показ информации для анонимных пользователей
+elseif (!isset($_SESSION['user'])) {
+    $page_content = include_template('error_403.php', ['categories' => $categories]);
+    http_response_code (403);
+}
+// Показ информации для залогиненных пользователей
 else {
     $page_content = include_template('add.php', ['categories' => $categories]);
 }

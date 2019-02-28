@@ -24,28 +24,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     // Проверим, что значение из поля «email» действительно является валидным E-mail адресом
-    if (!filter_var($login_form['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors[$email] = 'Введите валидный E-mail адрес';
+    if (empty($errors['email']) and !filter_var($login_form['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Введите валидный E-mail адрес';
     }
     // Найдем в таблице users пользователя с переданным email
-    $email = mysqli_real_escape_string($link, $login_form['email']);
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $res = mysqli_query($link, $sql);
+    if (empty($errors['email'])) {
+        $email = mysqli_real_escape_string($link, $login_form['email']);
+        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $res = mysqli_query($link, $sql);
 
-    // Проверяем, что сохраненный хеш пароля и введенный пароль из формы совпадают
-    // Если совпадение есть, значит пользователь указал верный пароль
-    // Тогда мы можем открыть для него сессию и записать в неё все данные о пользователе
-    $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
-    if (!count($errors) and $user) {
-        if (password_verify($login_form['password'], $user['password'])) {
-            $_SESSION['user'] = $user;
-        } else {
-            $errors['password'] = 'Неверный пароль';
+        // Проверяем, что сохраненный хеш пароля и введенный пароль из формы совпадают
+        // Если совпадение есть, значит пользователь указал верный пароль
+        // Тогда мы можем открыть для него сессию и записать в неё все данные о пользователе
+        $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
+        if (!count($errors) and $user) {
+            if (password_verify($login_form['password'], $user['password'])) {
+                $_SESSION['user'] = $user;
+            } else {
+                $errors['password'] = 'Неверный пароль';
+            }
         }
-    }
-    else {
-        $errors['email'] = 'Такой пользователь не найден';
+        else {
+            $errors['email'] = 'Такой пользователь не найден';
+        }
+
     }
 
     // Проверяем длину массива с ошибками.
@@ -61,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Перенаправляем пользователя на главную страницу
-        header("Location: /login.php");
+        header("Location: /index.php");
         exit();
     }
 }
@@ -76,8 +79,8 @@ else {
             'categories' => $categories,
             'lots' => $lots
         ]);
-
-    } else {
+    }
+    else {
         $page_content = include_template('login.php', [
             'categories' => $categories
         ]);
