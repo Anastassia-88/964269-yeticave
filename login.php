@@ -19,24 +19,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Далее мы проверяем существование каждого поля в списке обязательных к заполнению.
     // И если оно там есть, а также поле не заполнено, то добавляем ошибку валидации в список ошибок
     foreach ($required_fields as $field) {
-        if (empty($sign_up_form[$field])) {
+        if (empty($login_form[$field])) {
             $errors[$field] = 'Поле не заполнено';
         }
     }
-    // Проверим, что значение из поля «email» действительно является валидным E-mail адресом 
-    if (filter_var($sign_up_form['email'], FILTER_VALIDATE_EMAIL)) {
+    // Проверим, что значение из поля «email» действительно является валидным E-mail адресом
+    if (!filter_var($login_form['email'], FILTER_VALIDATE_EMAIL)) {
         $errors[$email] = 'Введите валидный E-mail адрес';
     }
     // Найдем в таблице users пользователя с переданным email
     $email = mysqli_real_escape_string($link, $login_form['email']);
     $sql = "SELECT * FROM users WHERE email = '$email'";
     $res = mysqli_query($link, $sql);
-        
+
     // Проверяем, что сохраненный хеш пароля и введенный пароль из формы совпадают
     // Если совпадение есть, значит пользователь указал верный пароль
     // Тогда мы можем открыть для него сессию и записать в неё все данные о пользователе
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
-        
+
     if (!count($errors) and $user) {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
@@ -45,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     else {
-		$errors['email'] = 'Такой пользователь не найден';
-	}
+        $errors['email'] = 'Такой пользователь не найден';
+    }
 
     // Проверяем длину массива с ошибками.
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
@@ -60,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Перенаправляем пользователя
         header("Location: /login.php");
         exit();
-        }
     }
+}
 // Если метод не POST, значит форма не была отправлена
 // Проверяем существование сессии с пользователем
 // Сессия есть - значит пользователь залогинен и ему можно показать страницу приветствия
@@ -75,7 +75,11 @@ else {
         $page_content = include_template('login.php', ['categories' => $categories]);
     }
 }
-    
+
+
+var_dump($_POST);
+
+
 $layout_content = include_template('layout.php',
     ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход на сайт']);
 print($layout_content);
