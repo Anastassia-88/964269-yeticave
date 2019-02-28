@@ -103,6 +103,6 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
     'username' => $_SESSION['user']['name'],
-    'title' => 'Добавление нового лота'
+    'title' => 'YetiCave'
 ]);
 print($layout_content);
