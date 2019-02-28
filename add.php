@@ -99,6 +99,10 @@ else {
     $page_content = include_template('add.php', ['categories' => $categories]);
 }
 
-$layout_content = include_template('layout.php',
-    ['content' => $page_content, 'categories' => $categories, 'title' => 'Добавление нового лота']);
+$layout_content = include_template('layout.php', [
+    'content' => $page_content,
+    'categories' => $categories,
+    'username' => $_SESSION['user']['name'],
+    'title' => 'Добавление нового лота'
+]);
 print($layout_content);

@@ -18,6 +18,10 @@ else {
     http_response_code (404);
 }
 
-$layout_content = include_template('layout.php',
-    ['content' => $page_content, 'categories' => $categories, 'title' => 'Просмотр лота']);
+$layout_content = include_template('layout.php', [
+    'content' => $page_content,
+    'categories' => $categories,
+    'username' => $_SESSION['user']['name'],
+    'title' => 'Просмотр лота'
+]);
 print($layout_content);
