@@ -8,7 +8,7 @@
             </ul>
         </nav>
         <?php $classname_form = isset($errors) ? "form--invalid" : ""; ?>
-        <form class="form container" action="sign-up.php" method="post" enctype="multipart/form-data">
+        <form class="form container <?= $classname_form; ?>" action="sign-up.php" method="post" enctype="multipart/form-data">
             <h2>Регистрация нового аккаунта</h2>
 
             <?php $classname = isset($errors['email']) ? "form__item--invalid" : "";
