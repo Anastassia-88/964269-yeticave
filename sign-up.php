@@ -24,6 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = 'Поле не заполнено';
         }
     }
+    // Проверим, что значение из поля «email» действительно является валидным E-mail адресом 
+    if (!filter_var($sign_up_form['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Введите валидный E-mail адрес';
+    }
     // Проверим, что указанный email уже не используется другим пользователем
     if (empty($errors)){
         $email = mysqli_real_escape_string($link, $sign_up_form['email']);
@@ -38,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // поэтому нам следует искать в массиве $_FILES одноименный ключ.
     // Если таковой найден, то мы можем получить имя загруженного файла
 
-    if (isset($_FILES['image']['name'])) {
+    if (!empty($_FILES['image']['name'])) {
         $tmp_name = $_FILES['image']['tmp_name'];
         $path = $_FILES['image']['name'];
 
@@ -49,13 +53,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $sign_up_form
         if ($file_type == "image/jpeg" or $file_type == "image/png") {
-            move_uploaded_file($tmp_name, 'img/' . $path);
-            $lot['image'] = ('img/' . $path);
+            move_uploaded_file($tmp_name, 'uploads/' . $path);
+            $sign_up_form['image'] = ('uploads/' . $path);
         }
         // Если файл не соответствует ожидаемому типу, добавляем ошибку
         else {
             $errors['image'] = 'Загрузите картинку в формате jpg, jpeg или png';
         }
+    }
+    else {
+        $sign_up_form['image'] = '';
+
     }
     
     // Проверяем длину массива с ошибками.
@@ -71,11 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Чтобы не хранить пароль в открытом виде преобразуем его в хеш
         $password = password_hash($sign_up_form['password'], PASSWORD_DEFAULT);
         $new_user_data = [$sign_up_form['name'], $sign_up_form['email'],
-            $sign_up_form['image'], $sign_up_form['password'],
+            $sign_up_form['image'], $password,
             $sign_up_form['message']];
-        add_user($link, $new_user_data);
+        add_user ($link, $new_user_data);
         // Перенаправляем пользователя на страницу входа
-        header("Location: login.php");
+        header("Location: /index.php");
         exit();
     }
 }
@@ -85,7 +93,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 else {
     $page_content = include_template('sign-up.php', ['categories' => $categories]);
 }
-print($page_content);
 
+$layout_content = include_template('layout.php', [
+    'content' => $page_content, 
+    'categories' => $categories, 
+    'username' => $_SESSION['user']['name'],
+    'title' => 'Регистрация'
+]);
+
+print($layout_content);
 
 

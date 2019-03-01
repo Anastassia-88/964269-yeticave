@@ -14,7 +14,14 @@ if ($lot) {
 }
 else {
 
-    $page_content = include_template('error.php', ['categories' => $categories]);
+    $page_content = include_template('error_404.php', ['categories' => $categories]);
     http_response_code (404);
 }
-print($page_content);
+
+$layout_content = include_template('layout.php', [
+    'content' => $page_content,
+    'categories' => $categories,
+    'username' => $_SESSION['user']['name'],
+    'title' => 'YetiCave'
+]);
+print($layout_content);

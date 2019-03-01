@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // поэтому нам следует искать в массиве $_FILES одноименный ключ.
     // Если таковой найден, то мы можем получить имя загруженного файла
 
-    if (isset($_FILES['image']['name'])) {
+    if (!empty($_FILES['image']['name'])) {
         $tmp_name = $_FILES['image']['tmp_name'];
         $path = $_FILES['image']['name'];
 
@@ -93,10 +93,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Если метод не POST, значит форма не была отправлена и валидировать ничего не надо,
-// поэтому просто подключаем шаблон показа формы
+// Если метод не POST, значит форма не была отправлена и валидировать ничего не надо
+// Показ информации для анонимных пользователей
+elseif (!isset($_SESSION['user'])) {
+    $page_content = include_template('error_403.php', ['categories' => $categories]);
+    http_response_code (403);
+}
+// Показ информации для залогиненных пользователей
 else {
     $page_content = include_template('add.php', ['categories' => $categories]);
 }
 
-print($page_content);
+$layout_content = include_template('layout.php', [
+    'content' => $page_content,
+    'categories' => $categories,
+    'username' => $_SESSION['user']['name'],
+    'title' => 'YetiCave'
+]);
+print($layout_content);
