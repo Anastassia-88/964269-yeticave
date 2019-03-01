@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     else {
         // Отправляем лот в базу данных
         $new_lot_data = [$lot['name'], $lot['description'], $lot['image'], $lot['start_price'], $lot['dt_end'],
-            $lot['bet_step'], $lot['category']];
+            $lot['bet_step'], $_SESSION['user']['id'], $lot['category']];
         add_lot($link, $new_lot_data);
         // Получаем ID нового лота и перенаправляем пользователя на страницу с его просмотром
         $lot_id = mysqli_insert_id($link);
