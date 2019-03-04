@@ -221,8 +221,11 @@ function time_ago ($add_date) {
     $days_count = date_interval_format($diff, "%d");
     $hours_count = date_interval_format($diff, "%h");
     $minutes_count = date_interval_format($diff, "%i");
-    if (intval($days_count) + intval($hours_count)) {
+    if ($days_count) {
         $result = date('d.m.y \в H:i', strtotime($add_date));
+    }
+    elseif ($hours_count) {
+        $result = "$hours_count" . " ч. назад";
     }
     else {
         $result = "$minutes_count" . " мин. назад";
