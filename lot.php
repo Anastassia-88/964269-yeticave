@@ -13,15 +13,15 @@ $lot = get_lot($link, $lot_id);
 // Получаем массив ставок
 $bets = get_bets($link, $lot_id);
 
-// Блок добавления ставки не показывается если 
-// пользователь не авторизован
-// срок размещения лота истёк
-// лот создан текущим пользователем
+// Условие показа блока добавления ставки
+// пользователь авторизован
+// срок размещения лота не истёк
+// лот создан не текущим пользователем
+$a = isset($_SESSION['user']);
+$b = strtotime("now") < strtotime($lot['dt_end']);
+$c = $lot['user_id'] == $_SESSION['user']['id'];
+$show_bet_form = $a and $b and !$c;
 
-isset($_SESSION['user'])
-$lot['user_id'] == $_SESSION['user']['id']
-strtotime("now") strtotime($lot['dt_end']) 
-    
 //Ищем в БД максимальную ставку по лоту
 $max_bet_array = get_max_bet ($link, $lot_id);
 $max_bet = $max_bet_array['MAX(amount)'];
@@ -86,8 +86,8 @@ if ($lot) {
         'current_price' => $current_price,
         'min_bet' => $min_bet,
         'bets_count' => $bets_count,
-        'lot_id' => $lot_id
-
+        'lot_id' => $lot_id,
+        'show_bet_form' => $show_bet_form
     ]);
 }
 

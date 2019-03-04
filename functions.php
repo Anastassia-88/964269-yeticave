@@ -222,7 +222,7 @@ function time_ago ($add_date) {
     $hours_count = date_interval_format($diff, "%h");
     $minutes_count = date_interval_format($diff, "%i");
     if (intval($days_count) + intval($hours_count)) {
-        $result = $add_date;
+        $result = date('d.m.y \в H:i', strtotime($add_date));
     }
     else {
         $result = "$minutes_count" . " мин. назад";

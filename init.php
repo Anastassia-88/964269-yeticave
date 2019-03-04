@@ -2,6 +2,8 @@
 
 session_start();
 
+date_default_timezone_set('Europe/Berlin');
+
 // Подключение базы данных
 $link = mysqli_connect("localhost", "root", "", "yeticave");
 

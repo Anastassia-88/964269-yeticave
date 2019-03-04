@@ -20,7 +20,7 @@
                     </div>
                     <div class="lot-item__right">
 
-                        <?php if (isset($_SESSION['user'])): ?>
+                        <?php if ($show_bet_form): ?>
                         <div class="lot-item__state">
                             <div class="lot-item__timer timer">
                                 <?= time_left_short ($lot['dt_end']); ?>
