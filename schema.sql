@@ -56,6 +56,10 @@ create index l_winner on lots(winner_id);
 create index b_user on bets(user_id);
 create index b_lot on bets(lot_id);
 
+-- добавляем SQL инструкцию на создание полнотекстового индекса для полей "название" и "описание" в таблице лотов
+CREATE FULLTEXT INDEX lot_ft_search
+on lots(name, description)
+
 
 
 

@@ -96,15 +96,7 @@ function include_template($name, $data) {
 
 // Форматируем цену лота
 function price_format($price) {
-    $price_formatted = ceil($price);
-    return number_format($price_formatted) . " &#8381;";
-}
-
-// Сколько часов и минут осталось до новых суток
-function get_time($dt_add) {
-    date_default_timezone_set('Europe/Berlin');
-    $rest_time = strtotime("tomorrow") - $dt_add;
-    return date("H:i", $rest_time);
+    return number_format($price,0,","," ") . " &#8381;";
 }
 
 // Вывод всех категорий
@@ -117,7 +109,7 @@ function get_categories($link){
 // Вывод новых лотов
 function get_lots($link){ 
     $sql = "select 
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, dt_end
     from lots l
     join categories c
     on l.category_id = c.id
@@ -131,12 +123,12 @@ function get_lots($link){
 // Вывод лота по id
 function get_lot($link, $lot_id) {
     $sql = "select
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, bet_step, dt_end
     from lots l
     join categories c
     on l.category_id = c.id
     where l.id = ?;";
-    $lot = db_fetch_data_1($link, $sql, $data = [$lot_id]);
+    $lot = db_fetch_data_1($link, $sql, [$lot_id]);
     return $lot;
 }
 
@@ -144,7 +136,7 @@ function get_lot($link, $lot_id) {
 function add_lot($link, $new_lot_data) {
 $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
 values (now(), ?, ?, ?, ?, ?, ?, ?, ?)";
-db_insert_data($link, $sql, $data = $new_lot_data);
+db_insert_data($link, $sql, $new_lot_data);
 }
 
 // Функция для проверки даты на соответствие формату
@@ -157,9 +149,95 @@ function check_date_format($date) {
     return $result;
 }
 
-// Добавление нового пользователя
+// Добавление в БД нового пользователя
 function add_user($link, $new_user_data) {
     $sql = "INSERT INTO users (dt_add, name, email, image, password, message)
 VALUES (NOW(), ?, ?, ?, ?, ?)";
-    db_insert_data($link, $sql, $data = $new_user_data);
+    db_insert_data($link, $sql, $new_user_data);
+}
+
+// Добавление в БД новой ставки
+function add_bet($link, $new_bet_data) {
+    $sql = "INSERT INTO bets (dt_add, amount, user_id, lot_id)
+VALUES (NOW(), ?, ?, ?)";
+    db_insert_data($link, $sql, $new_bet_data);
+}
+
+//Ищем в БД максимальную ставку по лоту
+function get_max_bet ($link, $lot_id) {
+    $sql = "SELECT MAX(amount) from bets where lot_id = ?;";
+    $max_bet = db_fetch_data_1($link, $sql, [$lot_id]);
+    return $max_bet;
+}
+
+// Вывод всех ставок
+function get_bets($link, $lot_id){
+    $sql = "select 
+    b.id, b.dt_add as dt_add, amount, u.name as name
+    from bets b
+    join users u
+    on b.user_id = u.id
+    where lot_id = ?
+    order by b.id desc;";
+    $bets = db_fetch_data($link, $sql, [$lot_id]);
+    return $bets;
+}
+
+// Сколько дней, часов и минут осталось до окончания торгов по лоту
+function time_left ($end_date) {
+    // date_default_timezone_set('Europe/Berlin');
+    $cur_date = date_create("now");
+    $dt_end = date_create($end_date);
+    $diff = date_diff($cur_date, $dt_end);
+    $days_count = date_interval_format($diff, "%d");
+    $hours_count = date_interval_format($diff, "%h");
+    $minutes_count = date_interval_format($diff, "%i");
+    $result = "$days_count" . " дн. " . "$hours_count" . " ч. " . "$minutes_count" . " мин. ";
+    return $result;
+}
+
+// Сколько дней или часов и минут осталось до окончания торгов по лоту
+function time_left_short ($end_date) {
+    // date_default_timezone_set('Europe/Berlin');
+    $cur_date = date_create("now");
+    $dt_end = date_create($end_date);
+    $diff = date_diff($cur_date, $dt_end);
+    $days_count = date_interval_format($diff, "%d");
+    if ($days_count) {
+        $result = "$days_count" . " дн. ";
+    }
+    else {
+        $result = date_interval_format($diff, "%H:%i");
+    }
+    return $result;
+}
+
+// Как давно была сделана запись
+function time_ago ($add_date) {
+    // date_default_timezone_set('Europe/Berlin');
+    $cur_date = date_create("now");
+    $dt_add = date_create($add_date);
+    $diff = date_diff($cur_date, $dt_add);
+    $days_count = date_interval_format($diff, "%d");
+    $hours_count = date_interval_format($diff, "%h");
+    $minutes_count = date_interval_format($diff, "%i");
+    if ($days_count or $hours_count) {
+        $result = "$days_count" . " дн. ";
+    }
+    else {
+        $result = "$minutes_count" . " мин. назад";
+    }
+    return $result;
+}
+
+// Полнотекстовый поиск
+function search_lot ($link, $search) {
+    $sql = "select 
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
+    from lots l
+    join categories c
+    on l.category_id = c.id
+    where match(l.name, description) against(?)";
+    $lots = db_fetch_data($link, $sql, [$search]);
+    return $lots;
 }

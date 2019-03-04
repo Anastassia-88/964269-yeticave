@@ -3,7 +3,7 @@
 require_once 'init.php';
 require_once 'functions.php';
 
-// запрос для получения массива категорий
+// Запрос для получения массива категорий
 $categories = get_categories($link);
 
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
@@ -91,14 +91,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Если метод не POST, значит форма не была отправлена и валидировать ничего не надо,
 // поэтому просто подключаем шаблон показа формы
 else {
-    $page_content = include_template('sign-up.php', ['categories' => $categories]);
+   $page_content = include_template('sign-up.php', ['categories' => $categories]);
 }
 
 $layout_content = include_template('layout.php', [
-    'content' => $page_content, 
-    'categories' => $categories, 
+    'content' => $page_content,
+    'categories' => $categories,
     'username' => $_SESSION['user']['name'],
-    'title' => 'Регистрация'
+    'title' => 'YetiCave'
 ]);
 
 print($layout_content);
