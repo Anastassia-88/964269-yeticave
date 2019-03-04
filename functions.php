@@ -123,7 +123,7 @@ function get_lots($link){
 // Вывод лота по id
 function get_lot($link, $lot_id) {
     $sql = "select
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, bet_step, dt_end
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, bet_step, dt_end, user_id
     from lots l
     join categories c
     on l.category_id = c.id
