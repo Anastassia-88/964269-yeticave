@@ -18,12 +18,10 @@ $bets = get_bets($link, $lot_id);
 // срок размещения лота истёк
 // лот создан текущим пользователем
 
-
-
-
-
-
-
+isset($_SESSION['user'])
+$lot['user_id'] == $_SESSION['user']['id']
+strtotime("now") strtotime($lot['dt_end']) 
+    
 //Ищем в БД максимальную ставку по лоту
 $max_bet_array = get_max_bet ($link, $lot_id);
 $max_bet = $max_bet_array['MAX(amount)'];
