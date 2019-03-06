@@ -37,8 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Указанная дата должна быть больше текущей даты, хотя бы на один день
     if (!check_date_format($date = $lot['dt_end'])) {
         $errors['dt_end'] = 'Введите дату в формате «ДД.ММ.ГГГГ»';
-    }
-    elseif (strtotime($lot['dt_end']) - strtotime("tomorrow") < 0) {
+    } elseif (strtotime($lot['dt_end']) - strtotime("tomorrow") < 0) {
         $errors['dt_end'] = 'Указанная дата должна быть больше текущей даты';
     }
     // Проверим, был ли загружен файл. Поле для загрузки файла в форме называется 'image',
@@ -55,13 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($file_type == "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'img/' . $path);
             $lot['image'] = ('img/' . $path);
-        }
-        // Если файл не соответствует ожидаемому типу, добавляем ошибку
-        else {
+        } else {
             $errors['image'] = 'Загрузите картинку в формате jpg, jpeg или png';
         }
     }
-    // Если файл не был загружен, добавляем ошибку
     else {$errors['image'] = 'Вы не загрузили файл';
     }
     // Проверяем длину массива с ошибками.
