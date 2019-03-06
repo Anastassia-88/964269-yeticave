@@ -1,13 +1,9 @@
 <?php
-
 require_once 'init.php';
 require_once 'functions.php';
 
 // Получаем массив категорий
 $categories = get_categories($link);
-
-
-
 
 $page_content = include_template('my-lots.php', [
     'lots' => $lots,
@@ -21,9 +17,6 @@ $page_content = include_template('my-lots.php', [
     'show_bet_form' => $show_bet_form
 ]);
 
-
-
-
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
@@ -31,7 +24,4 @@ $layout_content = include_template('layout.php', [
     'title' => 'YetiCave'
 ]);
 
-
-
 print($layout_content);
-

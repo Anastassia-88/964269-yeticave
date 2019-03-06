@@ -1,5 +1,4 @@
 <?php
-
 require_once 'init.php';
 require_once 'functions.php';
 
@@ -98,5 +97,3 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-
-

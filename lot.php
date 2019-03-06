@@ -1,5 +1,4 @@
 <?php
-
 require_once 'init.php';
 require_once 'functions.php';
 
@@ -100,7 +99,5 @@ $layout_content = include_template('layout.php', [
     'username' => $_SESSION['user']['name'],
     'title' => 'YetiCave'
 ]);
-
-
 
 print($layout_content);

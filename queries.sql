@@ -64,12 +64,3 @@ select *
 from bets b
 where lot_id = 1
 order by dt_add desc;
-
-
-
-
-
-
-
-
-
