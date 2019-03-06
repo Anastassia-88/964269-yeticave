@@ -55,15 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($file_type == "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'uploads/' . $path);
             $sign_up_form['image'] = ('uploads/' . $path);
-        }
-        // Если файл не соответствует ожидаемому типу, добавляем ошибку
-        else {
+        } else {
             $errors['image'] = 'Загрузите картинку в формате jpg, jpeg или png';
         }
-    }
-    else {
+    } else {
         $sign_up_form['image'] = '';
-
     }
     
     // Проверяем длину массива с ошибками.

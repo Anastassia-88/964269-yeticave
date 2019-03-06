@@ -77,6 +77,7 @@ function db_insert_data($link, $sql, $data = []) {
     return $result;
 }
 
+// Подключение шаблона
 function include_template($name, $data) {
     $name = 'templates/' . $name;
     $result = 'Что-то пошло не так';
@@ -107,7 +108,7 @@ function get_categories($link){
 }
 
 // Вывод новых лотов
-function get_lots($link){ 
+function get_lots($link){
     $sql = "select 
     l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, dt_end
     from lots l
@@ -117,6 +118,19 @@ function get_lots($link){
     order by l.id desc
     LIMIT 9;";
     $lots = db_fetch_data($link, $sql);
+    return $lots;
+}
+
+// Вывод лотов по категории
+function get_lots_by_cat($link, $category_id){
+    $sql = "select 
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, dt_end
+    from lots l
+    join categories c
+    on l.category_id = c.id
+    where category_id = ?
+    order by l.id desc;";
+    $lots = db_fetch_data($link, $sql, [$category_id]);
     return $lots;
 }
 
