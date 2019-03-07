@@ -13,12 +13,14 @@ $lot = get_lot($link, $lot_id);
 $bets = get_bets($link, $lot_id);
 
 // Условия показа блока добавления ставки:
-// пользователь авторизован, срок размещения лота не истёк, лот создан др. пользователем
-$show_bet_form = isset($_SESSION['user'])
-and (strtotime("now") < strtotime($lot['dt_end']))
-and !($lot['user_id'] == $_SESSION['user']['id']);
+// юзер авторизован, срок размещения лота не истёк, лот создан др. юзером, юзер еще не делал ставки по этому лоту
+$condition_1 = isset($_SESSION['user']);
+$condition_2 = strtotime("now") < strtotime($lot['dt_end']);
+$condition_3 = $lot['user_id'] == $user_id;
+$condition_4 = get_user_bets($link, $lot_id, $user_id);
+$show_bet_form = $condition_1 && $condition_2 && !$condition_3 && !$condition_4;
 
-//Ищем в БД максимальную ставку по лоту
+// Highest bet search
 $max_bet_array = get_max_bet ($link, $lot_id);
 $max_bet = $max_bet_array['MAX(amount)'];
 
@@ -63,13 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$error_1 = $error ?? '';
 if ($lot) {
     $page_content = include_template('lot.php', [
         'lot' => $lot,
         'categories' => $categories,
         'bets' => $bets,
-        'error' => $error_1,
+        'error' => $error ?? '',
         'current_price' => $current_price,
         'min_bet' => $min_bet,
         'bets_count' => $bets_count,
@@ -83,7 +84,7 @@ else {
     );
     http_response_code (404);
 }
-$user_name = $_SESSION['user']['name'] ?? '';
+
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,

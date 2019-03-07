@@ -13,7 +13,6 @@ $page_content = include_template('all-lots.php', [
     'lots' => $lots,
     'categories' => $categories
 ]);
-$user_name = $_SESSION['user']['name'] ?? '';
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,

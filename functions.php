@@ -145,7 +145,8 @@ function get_categories($link){
  */
 function get_lots($link){
     $sql = "select 
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, dt_end
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
+       description, dt_end
     from lots l
     join categories c
     on l.category_id = c.id
@@ -164,7 +165,8 @@ function get_lots($link){
  */
 function get_lots_by_cat($link, $category_id){
     $sql = "select 
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, dt_end
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
+       description, dt_end
     from lots l
     join categories c
     on l.category_id = c.id
@@ -182,7 +184,8 @@ function get_lots_by_cat($link, $category_id){
  */
 function get_lot($link, $lot_id) {
     $sql = "select
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description, bet_step, dt_end, user_id
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
+       description, bet_step, dt_end, user_id
     from lots l
     join categories c
     on l.category_id = c.id
@@ -265,6 +268,22 @@ function get_bets($link, $lot_id){
     where lot_id = ?
     order by b.id desc;";
     $bets = db_fetch_data($link, $sql, [$lot_id]);
+    return $bets;
+}
+
+// Поиск ставки юзера по лоту
+/**
+ * @param $link
+ * @param $lot_id
+ * @param $user_id
+ * @return array|null
+ */
+function get_user_bets($link, $lot_id, $user_id){
+    $sql = "select 
+    b.id
+    from bets b
+    where lot_id = ? and user_id = ?;";
+    $bets = db_fetch_data($link, $sql, [$lot_id, $user_id]);
     return $bets;
 }
 

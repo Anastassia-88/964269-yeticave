@@ -35,7 +35,7 @@
                             <span class="lot__cost"><?= price_format($lot['start_price']); ?></span>
                         </div>
                         <div class="lot__timer timer">
-                            <?= time_left ($lot['dt_end']); ?>
+                            <?= $time_left = (strtotime("now") < strtotime($lot['dt_end'])) ? time_left ($lot['dt_end']) : 'Торги окончены'; ?>
                         </div>
                     </div>
                 </div>

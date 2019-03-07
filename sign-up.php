@@ -88,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 else {
    $page_content = include_template('sign-up.php', ['categories' => $categories]);
 }
-$user_name = $_SESSION['user']['name'] ?? '';
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
