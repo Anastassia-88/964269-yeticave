@@ -22,9 +22,10 @@
                 <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
 
             <nav class="user-menu">
-                <?php if (isset($_SESSION['user'])): ?>
+                <?php if ($username): ?>
                     <div class="user-menu__logged">
                         <p><?= $username; ?></p>
+                        <a href="/my-lots.php">Мои лоты</a>
                         <a href="/logout.php">Выйти</a>
                     </div>
                 <?php else: ?>

@@ -89,12 +89,16 @@ elseif (!isset($_SESSION['user'])) {
 }
 // Показ информации для залогиненных пользователей
 else {
-    $page_content = include_template('add.php', ['categories' => $categories]);
+    $page_content = include_template('add.php', [
+        'categories' => $categories]
+
+    );
 }
+$user_name = $_SESSION['user']['name'] ?? '';
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
-    'username' => $_SESSION['user']['name'],
+    'username' => $user_name,
     'title' => 'YetiCave'
 ]);
 print($layout_content);

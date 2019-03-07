@@ -22,23 +22,13 @@ and !($lot['user_id'] == $_SESSION['user']['id']);
 $max_bet_array = get_max_bet ($link, $lot_id);
 $max_bet = $max_bet_array['MAX(amount)'];
 
-// Определяем текущую цену лота
-if ($max_bet) {
-    $current_price = $max_bet;
-}
-else {
-    $current_price = $lot['start_price'];
-}
+// Current lot price definition
+$current_price = ($max_bet) ? $max_bet : $lot['start_price'];
 
-// Определяем минимальную ставку
-if ($max_bet) {
-    $min_bet = $current_price + $lot['bet_step'];
-}
-else {
-    $min_bet = $current_price;
-}
+// Minimum bet definition
+$min_bet = ($max_bet) ? ($current_price + $lot['bet_step']) : $current_price;
 
-// Считаем общее количество ставок
+// Total number of bets
 $bets_count = count($bets);
 
 // Добавление ставки
@@ -73,12 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+$error_1 = $error ?? '';
 if ($lot) {
     $page_content = include_template('lot.php', [
         'lot' => $lot,
         'categories' => $categories,
         'bets' => $bets,
-        'error' => $error,
+        'error' => $error_1,
         'current_price' => $current_price,
         'min_bet' => $min_bet,
         'bets_count' => $bets_count,
@@ -92,11 +83,11 @@ else {
     );
     http_response_code (404);
 }
-
+$user_name = $_SESSION['user']['name'] ?? '';
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
-    'username' => $_SESSION['user']['name'],
+    'username' => $user_name,
     'title' => 'YetiCave'
 ]);
 

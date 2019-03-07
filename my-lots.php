@@ -16,11 +16,11 @@ $page_content = include_template('my-lots.php', [
     'lot_id' => $lot_id,
     'show_bet_form' => $show_bet_form
 ]);
-
+$user_name = $_SESSION['user']['name'] ?? '';
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
-    'username' => $_SESSION['user']['name'],
+    'username' => $user_name,
     'title' => 'YetiCave'
 ]);
 
