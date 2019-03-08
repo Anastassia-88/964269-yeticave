@@ -19,8 +19,6 @@
                         <p class="lot-item__description"><?= htmlspecialchars($lot['description']); ?></p>
                     </div>
                     <div class="lot-item__right">
-
-                        <?php if ($show_bet_form): ?>
                         <div class="lot-item__state">
                             <div class="lot-item__timer timer">
                                 <?= time_left_short ($lot['dt_end']); ?>
@@ -34,20 +32,20 @@
                                     Мин. ставка <span><?= price_format($min_bet); ?></span>
                                 </div>
                             </div>
-                            <form class="lot-item__form" action="/lot.php?id=<?= $lot_id; ?>" method="post">
-                                <?php $classname = isset($error) ? "form__item--invalid" : ""; ?>
-                                <p class="lot-item__form-item form__item <?= $classname; ?>
-                                    <label for="cost">Ваша ставка</label>
-                                    <input id="cost" type="text" name="amount" placeholder="<?= $min_bet; ?>">
-                                    <?php if (isset($error)): ?>
-                                    <span class="form__error"><?= $error; ?></span>
-                                    <?php endif; ?>
-
-                                </p>
-                                <button type="submit" class="button">Сделать ставку</button>
-                            </form>
+                            <?php if ($show_bet_form): ?>
+                                <form class="lot-item__form" action="/lot.php?id=<?= $lot_id; ?>" method="post">
+                                    <?php $classname = isset($error) ? "form__item--invalid" : ""; ?>
+                                    <p class="lot-item__form-item form__item <?= $classname; ?>
+                                        <label for="cost">Ваша ставка</label>
+                                        <input id="cost" type="text" name="amount" placeholder="<?= $min_bet; ?>">
+                                        <?php if (isset($error)): ?>
+                                        <span class="form__error"><?= $error; ?></span>
+                                        <?php endif; ?>
+                                    </p>
+                                    <button type="submit" class="button">Сделать ставку</button>
+                                </form>
+                            <?php endif; ?>
                         </div>
-                        <?php endif; ?>
 
                         <div class="history">
                             <h3>История ставок (<span><?= $bets_count; ?></span>)</h3>

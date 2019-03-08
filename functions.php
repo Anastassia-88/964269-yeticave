@@ -138,6 +138,19 @@ function get_categories($link){
     return $categories;
 }
 
+// Вывод имени категории по id
+/**
+ * @param $link
+ * @param $category_id
+ * @return array|null
+ */
+function get_category_name($link, $category_id) {
+    $sql = "select name from categories
+    where id = ?;";
+    $category_name = db_fetch_data_1($link, $sql, [$category_id]);
+    return $category_name;
+}
+
 // Вывод новых лотов
 /**
  * @param $link
@@ -150,7 +163,7 @@ function get_lots($link){
     from lots l
     join categories c
     on l.category_id = c.id
-    where winner_id is null
+    where dt_end > now()
     order by l.id desc
     LIMIT 9;";
     $lots = db_fetch_data($link, $sql);
@@ -170,7 +183,7 @@ function get_lots_by_cat($link, $category_id){
     from lots l
     join categories c
     on l.category_id = c.id
-    where category_id = ?
+    where category_id = ? and dt_end > now()
     order by l.id desc;";
     $lots = db_fetch_data($link, $sql, [$category_id]);
     return $lots;
@@ -287,6 +300,27 @@ function get_user_bets($link, $lot_id, $user_id){
     return $bets;
 }
 
+// Поиск всех ставок юзера
+/**
+ * @param $link
+ * @param $user_id
+ * @return array|null
+ */
+function get_my_rates($link, $user_id){
+    $sql = "select b.dt_add, amount, b.user_id, l.name as lot_name, c.name as category_name, message, l.image, 
+       l.id as lot_id, l.dt_end, winner_id
+    from bets b
+    join lots l
+    on b.lot_id = l.id
+    join categories c
+    on l.category_id = c.id
+    join users u
+    on l.user_id = u.id
+    where b.user_id = ?;";
+    $rates = db_fetch_data($link, $sql, [$user_id]);
+    return $rates;
+}
+
 // Сколько дней, часов и минут осталось до окончания торгов по лоту
 /**
  * @param $end_date
@@ -361,7 +395,8 @@ function search_lot ($link, $search) {
     from lots l
     join categories c
     on l.category_id = c.id
-    where match(l.name, description) against(?)";
+    where dt_end > now() and match(l.name, description) against(?)
+    order by l.id desc;";
     $lots = db_fetch_data($link, $sql, [$search]);
     return $lots;
 }

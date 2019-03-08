@@ -8,11 +8,6 @@ $lots = get_lots($link);
 // SQL-запрос для получения списка категорий
 $categories = get_categories($link);
 
-
-
-
-
-
 $page_content = include_template('index.php', [
     'lots' => $lots,
     'categories' => $categories

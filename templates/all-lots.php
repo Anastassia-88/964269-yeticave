@@ -9,7 +9,7 @@
 </nav>
 <div class="container">
     <section class="lots">
-        <h2>Все лоты в категории <span>«Доски и лыжи»</span></h2>
+        <h2>Все лоты в категории <span>"<?= $category_name['name']; ?>"</span></h2>
         <ul class="lots__list">
             <?php foreach ($lots as $lot): ?>
                 <li class="lots__item lot">
@@ -20,7 +20,8 @@
                     <div class="lot__info">
                         <span class="lot__category"><?= $lot['category']; ?></span>
                         <h3 class="lot__title"><a class="text-link"
-                                                  href="/lot.php?id=<?= $lot['id']; ?>"><?= htmlspecialchars($lot['name']); ?></a>
+                                                  href="/lot.php?id=<?= $lot['id']; ?>">
+                                <?= htmlspecialchars($lot['name']); ?></a>
                         </h3>
                         <div class="lot__state">
                             <div class="lot__rate">
