@@ -170,94 +170,67 @@ function get_lots($link){
     return $lots;
 }
 
-// Вывод лотов по категории, учитывая смещение и число гифок на странице
 /**
  * @param $link
  * @param $category_id
  * @return array|null
  */
-function get_lots_by_cat($link, $category_id, $cur_page, $lots){
-    // Определяем число лотов на странице
-    $page_items = 2;
-// Узнаем общее число лотов. Считаем кол-во страниц и смещение
-    $items_count = count($lots);
-    $pages_count = ceil($items_count / $page_items);
-    $offset = ($cur_page - 1) * $page_items;
-// Заполняем массив номерами всех страниц
-    $pages = range(1, $pages_count);
-
-
-
-
-    $sql = "select 
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
-       description, dt_end from lots l
-    join categories c on l.category_id = c.id
-    where category_id = ? and dt_end > now()
-    order by l.id desc
-    LIMIT" . $page_items . "OFFSET" . $offset;
-    $lots = db_fetch_data($link, $sql, [$category_id]);
-    return $lots;
+function count_lots_by_cat($link, $category_id) {
+    $sql = "SELECT COUNT(*) as cnt from lots 
+    where category_id = ? and dt_end > now();";
+    $result = db_fetch_data_1($link, $sql, [$category_id]);
+    return $result;
 }
 
-// Полнотекстовый поиск, учитывая смещение и число гифок на странице
 /**
  * @param $link
  * @param $search
  * @return array|null
  */
-function search_lot ($link, $search) {
+function count_lots_by_search($link, $search) {
+    $sql = "SELECT COUNT(*) as cnt from lots 
+    where dt_end > now() and match(name, description) against(?);";
+    $result = db_fetch_data_1($link, $sql, [$search]);
+    return $result;
+}
+
+// Вывод лотов по категории
+/**
+ * @param $link
+ * @param $category_id
+ * @param $page_items
+ * @param $offset
+ * @return array|null
+ */
+function get_lots_by_cat($link, $category_id, $page_items, $offset){
+    $sql = "select l.id as id, start_price, l.name as name, image, c.name as category, 
+       UNIX_TIMESTAMP(l.dt_add) as dt_add, description, dt_end from lots l
+    join categories c on l.category_id = c.id
+    where category_id = ? and dt_end > now()
+    order by l.id desc
+    LIMIT ? OFFSET ?;";
+    $lots = db_fetch_data($link, $sql, [$category_id, $page_items, $offset]);
+    return $lots;
+}
+
+// Полнотекстовый поиск
+/**
+ * @param $link
+ * @param $search
+ * @return array|null
+ */
+function search_lot ($link, $search, $page_items, $offset) {
     $sql = "select 
     l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
     from lots l
     join categories c
     on l.category_id = c.id
     where dt_end > now() and match(l.name, description) against(?)
-    order by l.id desc;";
-    $lots = db_fetch_data($link, $sql, [$search]);
-    return $lots;
-}
-
-
-function kkk($link, $category_id, $cur_page, $lots){
-    // Определяем число лотов на странице
-    $page_items = 2;
-// Узнаем общее число лотов. Считаем кол-во страниц и смещение
-    $items_count = count($lots);
-    $pages_count = ceil($items_count / $page_items);
-    $offset = ($cur_page - 1) * $page_items;
-// Заполняем массив номерами всех страниц
-    $pages = range(1, $pages_count);
-
-
-
-
-    $sql = "select 
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
-       description, dt_end from lots l
-    join categories c on l.category_id = c.id
-    where category_id = ? and dt_end > now()
     order by l.id desc
-    LIMIT" . $page_items . "OFFSET" . $offset;
-    $lots = db_fetch_data($link, $sql, [$category_id]);
+    LIMIT ? OFFSET ?;";
+    $lots = db_fetch_data($link, $sql, [$search, $page_items, $offset]);
     return $lots;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Вывод лота по id
 /**
@@ -277,14 +250,14 @@ function get_lot($link, $lot_id) {
     return $lot;
 }
 
-// Добавление нового лота
 /**
+ * Adding a new lot
  * @param $link
  * @param $new_lot_data
  */
 function add_lot($link, $new_lot_data) {
 $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
-values (now(), ?, ?, ?, ?, ?, ?, ?, ?)";
+values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%d.%m.%Y\"), ?, ?, ?)";
 db_insert_data($link, $sql, $new_lot_data);
 }
 
@@ -418,7 +391,7 @@ function time_left_short ($end_date) {
     $cur_date = date_create("now");
     $dt_end = date_create($end_date);
     $diff = date_diff($cur_date, $dt_end);
-    $days_count = date_interval_format($diff, "%d");
+    $days_count = date_interval_format($diff, "%a");
     if ($days_count) {
         $result = "$days_count" . " дн. ";
     }
