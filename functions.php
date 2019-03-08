@@ -209,6 +209,7 @@ function get_lot($link, $lot_id) {
 
 // Добавление нового лота
 /**
+ *
  * @param $link
  * @param $new_lot_data
  */
