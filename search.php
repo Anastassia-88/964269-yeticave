@@ -11,7 +11,7 @@ $search = (isset($_GET['search'])) ? (trim($_GET['search'])) : '';
 $cur_page = $_GET['page'] ?? 1;
 
 // Number of lots per page
-$page_items = 2;
+$page_items = 9;
 
 $items_count = count_lots_by_search($link, $search);
 
