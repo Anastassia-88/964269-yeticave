@@ -15,15 +15,15 @@ create table categories (
 
 create table lots (
                           id int auto_increment primary key, -- первичный ключ
-                          dt_add timestamp default current_timestamp, -- дата создания лота
-                          name char(255) not null, -- Название лота
-                          description text, -- Описание лота
-                          image char(255), -- Изображение лота
-                          start_price decimal not null, -- Начальная цена лота
-                          dt_end timestamp, -- Дата завершения
-                          bet_step decimal not null default 100, -- Шаг ставки
+                          dt_add timestamp default current_timestamp, -- дата создания
+                          name char(255) not null, -- название
+                          description text not null, -- описание
+                          image char(255) not null, -- изображение
+                          start_price decimal not null, -- начальная цена
+                          dt_end timestamp not null, -- дата завершения
+                          bet_step decimal not null default 100, -- шаг ставки
                           user_id int not null, -- автор, связь с таблицей users
-                          category_id int not null, -- Категория, связь с таблицей categories
+                          category_id int not null, -- категория, связь с таблицей categories
                           winner_id int -- победитель, связь с таблицей users
 );
 
@@ -55,6 +55,10 @@ create index l_category_id on lots(category_id);
 create index l_winner on lots(winner_id);
 create index b_user on bets(user_id);
 create index b_lot on bets(lot_id);
+
+-- добавляем SQL инструкцию на создание полнотекстового индекса для полей "название" и "описание" в таблице лотов
+CREATE FULLTEXT INDEX lot_ft_search
+on lots(name, description)
 
 
 

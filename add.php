@@ -1,15 +1,11 @@
 <?php
-
 require_once 'init.php';
 require_once 'functions.php';
-
 // запрос для получения массива категорий
 $categories = get_categories($link);
-
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную $lot
     $lot = $_POST['lot'];
     // Затем определяем список полей, которые собираемся валидировать
@@ -27,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Проверка для категорий
     if ($lot['category'] == 'select'){
         $errors['category'] = 'Поле не заполнено';
-
     }
     // Проверка начальной цены. Содержимое поля должно быть числом больше нуля
     if (!intval($lot['start_price']) or intval($lot['start_price'])<=0) {
@@ -42,44 +37,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Указанная дата должна быть больше текущей даты, хотя бы на один день
     if (!check_date_format($date = $lot['dt_end'])) {
         $errors['dt_end'] = 'Введите дату в формате «ДД.ММ.ГГГГ»';
-    }
-    elseif (strtotime($lot['dt_end']) - strtotime("tomorrow") < 0) {
+    } elseif (strtotime($lot['dt_end']) - strtotime("tomorrow") < 0) {
         $errors['dt_end'] = 'Указанная дата должна быть больше текущей даты';
     }
-
     // Проверим, был ли загружен файл. Поле для загрузки файла в форме называется 'image',
     // поэтому нам следует искать в массиве $_FILES одноименный ключ.
     // Если таковой найден, то мы можем получить имя загруженного файла
-
     if (!empty($_FILES['image']['name'])) {
         $tmp_name = $_FILES['image']['tmp_name'];
         $path = $_FILES['image']['name'];
-
         // С помощью стандартной функции finfo_ можно получить информацию о типе файле
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
-
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $lot
         if ($file_type == "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'img/' . $path);
             $lot['image'] = ('img/' . $path);
-        }
-        // Если файл не соответствует ожидаемому типу, добавляем ошибку
-        else {
+        } else {
             $errors['image'] = 'Загрузите картинку в формате jpg, jpeg или png';
         }
     }
-    // Если файл не был загружен, добавляем ошибку
     else {$errors['image'] = 'Вы не загрузили файл';
     }
-
     // Проверяем длину массива с ошибками.
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок
     if (count($errors)) {
-        $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors,
-            'categories' => $categories]);
+        $page_content = include_template('add.php', [
+            'lot' => $lot,
+            'errors' => $errors,
+            'categories' => $categories
+        ]);
     }
     // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
@@ -92,7 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: lot.php?id=" . $lot_id);
     }
 }
-
 // Если метод не POST, значит форма не была отправлена и валидировать ничего не надо
 // Показ информации для анонимных пользователей
 elseif (!isset($_SESSION['user'])) {
@@ -101,13 +89,15 @@ elseif (!isset($_SESSION['user'])) {
 }
 // Показ информации для залогиненных пользователей
 else {
-    $page_content = include_template('add.php', ['categories' => $categories]);
-}
+    $page_content = include_template('add.php', [
+        'categories' => $categories]
 
+    );
+}
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
-    'username' => $_SESSION['user']['name'],
+    'username' => $user_name,
     'title' => 'YetiCave'
 ]);
 print($layout_content);

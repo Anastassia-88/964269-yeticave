@@ -1,5 +1,4 @@
 <?php
-
 require_once 'init.php';
 require_once 'functions.php';
 
@@ -48,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         else {
             $errors['email'] = 'Такой пользователь не найден';
         }
-
     }
 
     // Проверяем длину массива с ошибками.
@@ -86,11 +84,10 @@ else {
         ]);
     }
 }
-
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
-    'username' => $_SESSION['user']['name'],
+    'username' => $user_name,
     'title' => 'YetiCave']);
 
 print($layout_content);

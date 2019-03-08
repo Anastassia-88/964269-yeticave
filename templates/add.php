@@ -2,7 +2,7 @@
       <ul class="nav__list container">
         <?php foreach($categories as $category): ?>
         <li class="nav__item">
-          <a href="all-lots.html"><?= $category['name']; ?></a>
+          <a href="/all-lots.php?id=<?= $category['id'];?>"><?= $category['name']; ?></a>
         </li>
         <?php endforeach; ?>
       </ul>
@@ -32,8 +32,16 @@
           <select id="category" name="lot[category]" required>
             <option value = "select">Выберите категорию</option>
             <?php foreach($categories as $category): ?>
-              <option value="<?= $category['id']; ?>" <? if($lot['category'] == $category['id'])
+
+
+              <option value="<?= $category['id']; ?>" <?
+
+
+              if (isset($lot['category']) && ($lot['category'] == $category['id']))
               {print ('selected');} ?>><?= $category['name']; ?></option>
+
+
+
             <?php endforeach; ?>
           </select>
             <?php if (isset($errors['category'])): ?>

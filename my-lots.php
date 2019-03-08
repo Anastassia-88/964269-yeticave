@@ -2,15 +2,15 @@
 require_once 'init.php';
 require_once 'functions.php';
 
-// SQL-запрос для получения списка новых лотов
-$lots = get_lots($link);
-
-// SQL-запрос для получения списка категорий
+// Получаем массив категорий
 $categories = get_categories($link);
 
-$page_content = include_template('index.php', [
-    'lots' => $lots,
-    'categories' => $categories
+$rates = get_my_rates($link, $user_id);
+
+$page_content = include_template('my-lots.php', [
+    'categories' => $categories,
+    'rates' => $rates,
+    'user_id' => $user_id
 ]);
 
 $layout_content = include_template('layout.php', [
@@ -18,6 +18,6 @@ $layout_content = include_template('layout.php', [
     'categories' => $categories,
     'username' => $user_name,
     'title' => 'YetiCave'
-    ]);
+]);
 
 print($layout_content);
