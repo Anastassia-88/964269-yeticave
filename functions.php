@@ -6,7 +6,7 @@
  * @param $sql string SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  *
- * @return mysqli_stmt Подготовленное выражение
+ * @return mysqli_stmt Prepared Statement
  */
 function db_get_prepare_stmt($link, $sql, $data = []) {
     $stmt = mysqli_prepare($link, $sql);
@@ -127,8 +127,8 @@ function price_format($price) {
     return number_format($price,0,","," ") . " &#8381;";
 }
 
-// Вывод всех категорий
 /**
+ * Retrieve all categories
  * @param $link
  * @return array|null
  */
@@ -138,8 +138,8 @@ function get_categories($link){
     return $categories;
 }
 
-// Вывод имени категории по id
 /**
+ * Retrieve the name of a category from its id
  * @param $link
  * @param $category_id
  * @return array|null
@@ -151,8 +151,8 @@ function get_category_name($link, $category_id) {
     return $category_name;
 }
 
-// Вывод новых лотов
 /**
+ * Retrieve new lots
  * @param $link
  * @return array|null
  */
@@ -170,24 +170,94 @@ function get_lots($link){
     return $lots;
 }
 
-// Вывод лотов по категории
+// Вывод лотов по категории, учитывая смещение и число гифок на странице
 /**
  * @param $link
  * @param $category_id
  * @return array|null
  */
-function get_lots_by_cat($link, $category_id){
+function get_lots_by_cat($link, $category_id, $cur_page, $lots){
+    // Определяем число лотов на странице
+    $page_items = 2;
+// Узнаем общее число лотов. Считаем кол-во страниц и смещение
+    $items_count = count($lots);
+    $pages_count = ceil($items_count / $page_items);
+    $offset = ($cur_page - 1) * $page_items;
+// Заполняем массив номерами всех страниц
+    $pages = range(1, $pages_count);
+
+
+
+
     $sql = "select 
     l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
-       description, dt_end
-    from lots l
-    join categories c
-    on l.category_id = c.id
+       description, dt_end from lots l
+    join categories c on l.category_id = c.id
     where category_id = ? and dt_end > now()
-    order by l.id desc;";
+    order by l.id desc
+    LIMIT" . $page_items . "OFFSET" . $offset;
     $lots = db_fetch_data($link, $sql, [$category_id]);
     return $lots;
 }
+
+// Полнотекстовый поиск, учитывая смещение и число гифок на странице
+/**
+ * @param $link
+ * @param $search
+ * @return array|null
+ */
+function search_lot ($link, $search) {
+    $sql = "select 
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
+    from lots l
+    join categories c
+    on l.category_id = c.id
+    where dt_end > now() and match(l.name, description) against(?)
+    order by l.id desc;";
+    $lots = db_fetch_data($link, $sql, [$search]);
+    return $lots;
+}
+
+
+function kkk($link, $category_id, $cur_page, $lots){
+    // Определяем число лотов на странице
+    $page_items = 2;
+// Узнаем общее число лотов. Считаем кол-во страниц и смещение
+    $items_count = count($lots);
+    $pages_count = ceil($items_count / $page_items);
+    $offset = ($cur_page - 1) * $page_items;
+// Заполняем массив номерами всех страниц
+    $pages = range(1, $pages_count);
+
+
+
+
+    $sql = "select 
+    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
+       description, dt_end from lots l
+    join categories c on l.category_id = c.id
+    where category_id = ? and dt_end > now()
+    order by l.id desc
+    LIMIT" . $page_items . "OFFSET" . $offset;
+    $lots = db_fetch_data($link, $sql, [$category_id]);
+    return $lots;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Вывод лота по id
 /**
@@ -383,20 +453,3 @@ function time_ago ($add_date) {
     return $result;
 }
 
-// Полнотекстовый поиск
-/**
- * @param $link
- * @param $search
- * @return array|null
- */
-function search_lot ($link, $search) {
-    $sql = "select 
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
-    from lots l
-    join categories c
-    on l.category_id = c.id
-    where dt_end > now() and match(l.name, description) against(?)
-    order by l.id desc;";
-    $lots = db_fetch_data($link, $sql, [$search]);
-    return $lots;
-}

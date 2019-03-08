@@ -9,6 +9,8 @@ $search = (isset($_GET['search'])) ? (trim($_GET['search'])) : '';
 
 $lots = search_lot($link, $search) ?? '';
 
+
+
 $page_content = include_template('search.php', [
     'categories' => $categories,
     'lots' => $lots,
