@@ -1,13 +1,14 @@
 <?php
 
 /**
+ * Returns a prepared statement
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
- * @param $link mysqli - Connection to a MySQL database server
- * @param $sql string - SQL query with placeholders instead of values
- * @param array $data - Values to insert instead of placeholders
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
+ * @param $sql string - SQL query with placeholders instead of values / SQL запрос с плейсхолдерами вместо значений
+ * @param array $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
  *
- * @return mysqli_stmt Prepared Statement
+ * @return mysqli_stmt Prepared statement / Подготовленное выражение
  */
 function db_get_prepare_stmt($link, $sql, $data = [])
 {
@@ -47,12 +48,14 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     return $stmt;
 }
 
-// Получение записей из БД в виде двумерного ассоциативного массива (несколько лотов)
 /**
- * @param $link mysqli - Connection to a MySQL database server
- * @param $sql string - SQL query with placeholders instead of values
- * @param array $data - Values to insert instead of placeholders
- * @return array|null
+ * Returns data from MySQL database as associative two-dimensional array
+ * Возвращает записи из БД в виде двумерного ассоциативного массива
+ *
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
+ * @param $sql string - SQL query with placeholders instead of values / SQL запрос с плейсхолдерами вместо значений
+ * @param array $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
+ * @return array|null - Двумерный ассоциативный массив
  */
 function db_fetch_data($link, $sql, $data = [])
 {
@@ -68,9 +71,9 @@ function db_fetch_data($link, $sql, $data = [])
 
 // Получение записей из БД в виде одномерного неассоциативного массива (один лот)
 /**
- * @param $link mysqli - Connection to a MySQL database server
- * @param $sql string - SQL query with placeholders instead of values
- * @param array $data - Values to insert instead of placeholders
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
+ * @param $sql string - SQL query with placeholders instead of values / SQL запрос с плейсхолдерами вместо значений
+ * @param array $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
  * @return array|null
  */
 function db_fetch_data_1($link, $sql, $data = [])
@@ -87,9 +90,9 @@ function db_fetch_data_1($link, $sql, $data = [])
 
 // Добавление новой записи
 /**
- * @param $link mysqli - Connection to a MySQL database server
- * @param $sql string - SQL query with placeholders instead of values
- * @param array $data - Values to insert instead of placeholders
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
+ * @param $sql string - SQL query with placeholders instead of values / SQL запрос с плейсхолдерами вместо значений
+ * @param array $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
  * @return bool|int|string
  */
 function db_insert_data($link, $sql, $data = [])
@@ -102,10 +105,11 @@ function db_insert_data($link, $sql, $data = [])
     return $result;
 }
 
-// Подключение шаблона
 /**
+ * Includes template / Подключает шаблон
+ *
  * @param $name
- * @param $data - Values to insert instead of placeholders
+ * @param $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
  * @return false|string
  */
 function include_template($name, $data)
@@ -126,8 +130,9 @@ function include_template($name, $data)
     RETURN $result;
 }
 
-// Форматируем цену лота
 /**
+ * Formats price
+ *
  * @param $price
  * @return string
  */
@@ -137,7 +142,7 @@ function price_format($price)
 }
 
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @return array|null
  */
 function get_categories($link)
@@ -148,7 +153,7 @@ function get_categories($link)
 }
 
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $category_id
  * @return array|null
  */
@@ -161,7 +166,7 @@ function get_category_name($link, $category_id)
 }
 
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @return array|null
  */
 function get_lots($link)
@@ -179,11 +184,10 @@ function get_lots($link)
     RETURN $lots;
 }
 
-//Ищем в БД максимальную ставку по лоту
 /**
- * Max lot's bid search
+ * Finds max lot's bid
  *
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $lot_id
  * @return array|null - Max rate
  */
@@ -195,7 +199,9 @@ function get_max_bid($link, $lot_id)
 }
 
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * Counts lots by category
+ *
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $category_id
  * @return array|null
  */
@@ -208,7 +214,7 @@ function count_lots_by_cat($link, $category_id)
 }
 
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $search
  * @return array|null
  */
@@ -222,7 +228,7 @@ function count_lots_by_search($link, $search)
 
 // Вывод лотов по категории
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $category_id
  * @param $page_items
  * @param $offset
@@ -242,7 +248,7 @@ function get_lots_by_cat($link, $category_id, $page_items, $offset)
 
 // Полнотекстовый поиск
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $search
  * @param $page_items
  * @param $offset
@@ -262,9 +268,10 @@ function search_lot($link, $search, $page_items, $offset)
     RETURN $lots;
 }
 
-// Вывод лота по id
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * Gets lot by id
+ *
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $lot_id
  * @return array|null
  */
@@ -282,15 +289,16 @@ function get_lot($link, $lot_id)
 }
 
 /**
- * Adding a new lot
- * @param $link mysqli - Connection to a MySQL database server
- * @param $new_lot_data
+ * Adds a new lot to a MySQL database / Добавляет новый лот в БД
+ *
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
+ * @param $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
  */
-function add_lot($link, $new_lot_data)
+function add_lot($link, $data)
 {
     $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
 values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%d.%m.%Y\"), ?, ?, ?)";
-    db_insert_data($link, $sql, $new_lot_data);
+    db_insert_data($link, $sql, $data);
 }
 
 // Функция для проверки даты на соответствие формату
@@ -308,10 +316,11 @@ function check_date_format($date)
     RETURN $result;
 }
 
-// Добавление в БД нового пользователя
 /**
- * @param $link mysqli - Connection to a MySQL database server
- * @param $data - Values to insert instead of placeholders
+ * Adds a new user to a MySQL database / Добавляет нового юзера в БД
+ *
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
+ * @param $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
  */
 function add_user($link, $data)
 {
@@ -320,9 +329,10 @@ VALUES (NOW(), ?, ?, ?, ?, ?)";
     db_insert_data($link, $sql, $data);
 }
 
-// Добавление в БД новой ставки
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * Adds a new bid to a MySQL database / Добавляет новую ставку по лоту в БД
+ *
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $data - Values to insert instead of placeholders
  */
 function add_bet($link, $data)
@@ -332,9 +342,10 @@ VALUES (NOW(), ?, ?, ?)";
     db_insert_data($link, $sql, $data);
 }
 
-// Вывод всех ставок
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * Gets all lot's bids
+ *
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $lot_id
  * @return array|null
  */
@@ -353,7 +364,7 @@ function get_bets($link, $lot_id)
 
 // Поиск ставки юзера по лоту
 /**
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $lot_id
  * @param $user_id
  * @return array|null
@@ -372,7 +383,7 @@ function get_user_bets($link, $lot_id, $user_id)
 /**
  * Finds all user's bids
  *
- * @param $link mysqli - Connection to a MySQL database server
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $user_id
  * @return array|null - Array with all user's bids
  */
