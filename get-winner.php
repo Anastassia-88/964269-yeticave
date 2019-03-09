@@ -7,7 +7,6 @@ require_once 'vendor/autoload.php';
 $sql = "SELECT id, name from lots where dt_end <= now() and winner_id is null;";
 $closed_lots_without_winner = db_fetch_data($link, $sql);
 
-
 if ($closed_lots_without_winner) {
     foreach ($closed_lots_without_winner as $lot) {
         $sql = "
@@ -20,7 +19,7 @@ if ($closed_lots_without_winner) {
         LIMIT 1;";
         $winner_data = db_fetch_data_1($link, $sql, [$lot['id']]);
 
-        if (!empty($winner_rate)) {
+        if (!empty($winner_data)) {
             $sql = "UPDATE lots SET winner_id = ? where id = ?;";
             db_insert_data($link, $sql, [$winner_data['winner_id'], $lot['id']]);
 
