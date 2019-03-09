@@ -1,6 +1,7 @@
 <?php
 require_once 'init.php';
 require_once 'functions.php';
+require_once 'get-winner.php';
 
 // SQL-запрос для получения списка новых лотов
 $lots = get_lots($link);
@@ -18,6 +19,5 @@ $layout_content = include_template('layout.php', [
     'categories' => $categories,
     'username' => $user_name,
     'title' => 'YetiCave'
-    ]);
-
+]);
 print($layout_content);

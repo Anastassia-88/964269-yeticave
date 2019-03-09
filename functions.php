@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
@@ -8,7 +9,8 @@
  *
  * @return mysqli_stmt Prepared Statement
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($data) {
@@ -20,12 +22,14 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
+            } else {
+                if (is_string($value)) {
+                    $type = 's';
+                } else {
+                    if (is_double($value)) {
+                        $type = 'd';
+                    }
+                }
             }
 
             if ($type) {
@@ -50,7 +54,8 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  * @param array $data
  * @return array|null
  */
-function db_fetch_data($link, $sql, $data = []) {
+function db_fetch_data($link, $sql, $data = [])
+{
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     mysqli_stmt_execute($stmt);
@@ -68,7 +73,8 @@ function db_fetch_data($link, $sql, $data = []) {
  * @param array $data
  * @return array|null
  */
-function db_fetch_data_1($link, $sql, $data = []) {
+function db_fetch_data_1($link, $sql, $data = [])
+{
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     mysqli_stmt_execute($stmt);
@@ -86,7 +92,8 @@ function db_fetch_data_1($link, $sql, $data = []) {
  * @param array $data
  * @return bool|int|string
  */
-function db_insert_data($link, $sql, $data = []) {
+function db_insert_data($link, $sql, $data = [])
+{
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
     if ($result) {
@@ -101,7 +108,8 @@ function db_insert_data($link, $sql, $data = []) {
  * @param $data
  * @return false|string
  */
-function include_template($name, $data) {
+function include_template($name, $data)
+{
     $name = 'templates/' . $name;
     $result = 'Что-то пошло не так';
 
@@ -115,7 +123,7 @@ function include_template($name, $data) {
 
     $result = ob_get_clean();
 
-    return $result;
+    RETURN $result;
 }
 
 // Форматируем цену лота
@@ -123,8 +131,9 @@ function include_template($name, $data) {
  * @param $price
  * @return string
  */
-function price_format($price) {
-    return number_format($price,0,","," ") . " &#8381;";
+function price_format($price)
+{
+    RETURN number_format($price, 0, ",", " ") . " &#8381;";
 }
 
 /**
@@ -132,10 +141,11 @@ function price_format($price) {
  * @param $link
  * @return array|null
  */
-function get_categories($link){
-    $sql = "select * from categories;";
+function get_categories($link)
+{
+    $sql = "SELECT * from categories;";
     $categories = db_fetch_data($link, $sql);
-    return $categories;
+    RETURN $categories;
 }
 
 /**
@@ -144,11 +154,12 @@ function get_categories($link){
  * @param $category_id
  * @return array|null
  */
-function get_category_name($link, $category_id) {
-    $sql = "select name from categories
+function get_category_name($link, $category_id)
+{
+    $sql = "SELECT name from categories
     where id = ?;";
     $category_name = db_fetch_data_1($link, $sql, [$category_id]);
-    return $category_name;
+    RETURN $category_name;
 }
 
 /**
@@ -156,30 +167,51 @@ function get_category_name($link, $category_id) {
  * @param $link
  * @return array|null
  */
-function get_lots($link){
-    $sql = "select 
+function get_lots($link)
+{
+    $sql = "SELECT 
     l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
        description, dt_end
-    from lots l
-    join categories c
-    on l.category_id = c.id
-    where dt_end > now()
-    order by l.id desc
+    FROM lots l
+    JOIN categories c
+    ON l.category_id = c.id
+    WHERE dt_end > now()
+    ORDER BY l.id DESC
     LIMIT 9;";
     $lots = db_fetch_data($link, $sql);
-    return $lots;
+    RETURN $lots;
 }
+
+
+
+
+//Ищем в БД максимальную ставку по лоту
+/**
+ * @param $link
+ * @param $lot_id
+ * @return array|null
+ */
+function get_max_bet($link, $lot_id)
+{
+    $sql = "SELECT MAX(amount) FROM bets WHERE lot_id = ?;";
+    $max_bet = db_fetch_data_1($link, $sql, [$lot_id]);
+    RETURN $max_bet;
+}
+
+
+
 
 /**
  * @param $link
  * @param $category_id
  * @return array|null
  */
-function count_lots_by_cat($link, $category_id) {
+function count_lots_by_cat($link, $category_id)
+{
     $sql = "SELECT COUNT(*) as cnt from lots 
     where category_id = ? and dt_end > now();";
     $result = db_fetch_data_1($link, $sql, [$category_id]);
-    return $result;
+    RETURN $result;
 }
 
 /**
@@ -187,11 +219,12 @@ function count_lots_by_cat($link, $category_id) {
  * @param $search
  * @return array|null
  */
-function count_lots_by_search($link, $search) {
+function count_lots_by_search($link, $search)
+{
     $sql = "SELECT COUNT(*) as cnt from lots 
     where dt_end > now() and match(name, description) against(?);";
     $result = db_fetch_data_1($link, $sql, [$search]);
-    return $result;
+    RETURN $result;
 }
 
 // Вывод лотов по категории
@@ -202,15 +235,16 @@ function count_lots_by_search($link, $search) {
  * @param $offset
  * @return array|null
  */
-function get_lots_by_cat($link, $category_id, $page_items, $offset){
-    $sql = "select l.id as id, start_price, l.name as name, image, c.name as category, 
+function get_lots_by_cat($link, $category_id, $page_items, $offset)
+{
+    $sql = "SELECT l.id as id, start_price, l.name as name, image, c.name as category, 
        UNIX_TIMESTAMP(l.dt_add) as dt_add, description, dt_end from lots l
     join categories c on l.category_id = c.id
     where category_id = ? and dt_end > now()
     order by l.id desc
     LIMIT ? OFFSET ?;";
     $lots = db_fetch_data($link, $sql, [$category_id, $page_items, $offset]);
-    return $lots;
+    RETURN $lots;
 }
 
 // Полнотекстовый поиск
@@ -219,8 +253,9 @@ function get_lots_by_cat($link, $category_id, $page_items, $offset){
  * @param $search
  * @return array|null
  */
-function search_lot ($link, $search, $page_items, $offset) {
-    $sql = "select 
+function search_lot($link, $search, $page_items, $offset)
+{
+    $sql = "SELECT 
     l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
     from lots l
     join categories c
@@ -229,7 +264,7 @@ function search_lot ($link, $search, $page_items, $offset) {
     order by l.id desc
     LIMIT ? OFFSET ?;";
     $lots = db_fetch_data($link, $sql, [$search, $page_items, $offset]);
-    return $lots;
+    RETURN $lots;
 }
 
 // Вывод лота по id
@@ -238,8 +273,9 @@ function search_lot ($link, $search, $page_items, $offset) {
  * @param $lot_id
  * @return array|null
  */
-function get_lot($link, $lot_id) {
-    $sql = "select
+function get_lot($link, $lot_id)
+{
+    $sql = "SELECT
     l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
        description, bet_step, dt_end, user_id
     from lots l
@@ -247,7 +283,7 @@ function get_lot($link, $lot_id) {
     on l.category_id = c.id
     where l.id = ?;";
     $lot = db_fetch_data_1($link, $sql, [$lot_id]);
-    return $lot;
+    RETURN $lot;
 }
 
 /**
@@ -255,10 +291,11 @@ function get_lot($link, $lot_id) {
  * @param $link
  * @param $new_lot_data
  */
-function add_lot($link, $new_lot_data) {
-$sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
+function add_lot($link, $new_lot_data)
+{
+    $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
 values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%d.%m.%Y\"), ?, ?, ?)";
-db_insert_data($link, $sql, $new_lot_data);
+    db_insert_data($link, $sql, $new_lot_data);
 }
 
 // Функция для проверки даты на соответствие формату
@@ -266,13 +303,14 @@ db_insert_data($link, $sql, $new_lot_data);
  * @param $date
  * @return bool
  */
-function check_date_format($date) {
+function check_date_format($date)
+{
     $result = false;
     $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
     if (preg_match($regexp, $date, $parts) && count($parts) == 4) {
         $result = checkdate($parts[2], $parts[1], $parts[3]);
     }
-    return $result;
+    RETURN $result;
 }
 
 // Добавление в БД нового пользователя
@@ -280,7 +318,8 @@ function check_date_format($date) {
  * @param $link
  * @param $new_user_data
  */
-function add_user($link, $new_user_data) {
+function add_user($link, $new_user_data)
+{
     $sql = "INSERT INTO users (dt_add, name, email, image, password, message)
 VALUES (NOW(), ?, ?, ?, ?, ?)";
     db_insert_data($link, $sql, $new_user_data);
@@ -291,23 +330,13 @@ VALUES (NOW(), ?, ?, ?, ?, ?)";
  * @param $link
  * @param $new_bet_data
  */
-function add_bet($link, $new_bet_data) {
+function add_bet($link, $new_bet_data)
+{
     $sql = "INSERT INTO bets (dt_add, amount, user_id, lot_id)
 VALUES (NOW(), ?, ?, ?)";
     db_insert_data($link, $sql, $new_bet_data);
 }
 
-//Ищем в БД максимальную ставку по лоту
-/**
- * @param $link
- * @param $lot_id
- * @return array|null
- */
-function get_max_bet ($link, $lot_id) {
-    $sql = "SELECT MAX(amount) from bets where lot_id = ?;";
-    $max_bet = db_fetch_data_1($link, $sql, [$lot_id]);
-    return $max_bet;
-}
 
 // Вывод всех ставок
 /**
@@ -315,8 +344,9 @@ function get_max_bet ($link, $lot_id) {
  * @param $lot_id
  * @return array|null
  */
-function get_bets($link, $lot_id){
-    $sql = "select 
+function get_bets($link, $lot_id)
+{
+    $sql = "SELECT 
     b.id, b.dt_add as dt_add, amount, u.name as name
     from bets b
     join users u
@@ -324,7 +354,7 @@ function get_bets($link, $lot_id){
     where lot_id = ?
     order by b.id desc;";
     $bets = db_fetch_data($link, $sql, [$lot_id]);
-    return $bets;
+    RETURN $bets;
 }
 
 // Поиск ставки юзера по лоту
@@ -334,13 +364,14 @@ function get_bets($link, $lot_id){
  * @param $user_id
  * @return array|null
  */
-function get_user_bets($link, $lot_id, $user_id){
-    $sql = "select 
+function get_user_bets($link, $lot_id, $user_id)
+{
+    $sql = "SELECT 
     b.id
     from bets b
     where lot_id = ? and user_id = ?;";
     $bets = db_fetch_data($link, $sql, [$lot_id, $user_id]);
-    return $bets;
+    RETURN $bets;
 }
 
 // Поиск всех ставок юзера
@@ -349,7 +380,8 @@ function get_user_bets($link, $lot_id, $user_id){
  * @param $user_id
  * @return array|null
  */
-function get_my_rates($link, $user_id){
+function get_my_rates($link, $user_id)
+{
     $sql = "select b.dt_add, amount, b.user_id, l.name as lot_name, c.name as category_name, message, l.image, 
        l.id as lot_id, l.dt_end, winner_id
     from bets b
@@ -361,7 +393,7 @@ function get_my_rates($link, $user_id){
     on l.user_id = u.id
     where b.user_id = ?;";
     $rates = db_fetch_data($link, $sql, [$user_id]);
-    return $rates;
+    RETURN $rates;
 }
 
 // Сколько дней, часов и минут осталось до окончания торгов по лоту
@@ -369,16 +401,17 @@ function get_my_rates($link, $user_id){
  * @param $end_date
  * @return string
  */
-function time_left ($end_date) {
+function time_left($end_date)
+{
     // date_default_timezone_set('Europe/Berlin');
     $cur_date = date_create("now");
     $dt_end = date_create($end_date);
     $diff = date_diff($cur_date, $dt_end);
-    $days_count = date_interval_format($diff, "%d");
+    $days_count = date_interval_format($diff, "%a");
     $hours_count = date_interval_format($diff, "%h");
     $minutes_count = date_interval_format($diff, "%i");
     $result = "$days_count" . " дн. " . "$hours_count" . " ч. " . "$minutes_count" . " мин. ";
-    return $result;
+    RETURN $result;
 }
 
 // Сколько дней или часов и минут осталось до окончания торгов по лоту
@@ -386,7 +419,8 @@ function time_left ($end_date) {
  * @param $end_date
  * @return DateInterval|string
  */
-function time_left_short ($end_date) {
+function time_left_short($end_date)
+{
     // date_default_timezone_set('Europe/Berlin');
     $cur_date = date_create("now");
     $dt_end = date_create($end_date);
@@ -394,11 +428,10 @@ function time_left_short ($end_date) {
     $days_count = date_interval_format($diff, "%a");
     if ($days_count) {
         $result = "$days_count" . " дн. ";
-    }
-    else {
+    } else {
         $result = date_interval_format($diff, "%H:%i");
     }
-    return $result;
+    RETURN $result;
 }
 
 // Как давно была сделана запись
@@ -406,7 +439,8 @@ function time_left_short ($end_date) {
  * @param $add_date
  * @return false|string
  */
-function time_ago ($add_date) {
+function time_ago($add_date)
+{
     // date_default_timezone_set('Europe/Berlin');
     $cur_date = date_create("now");
     $dt_add = date_create($add_date);
@@ -416,13 +450,11 @@ function time_ago ($add_date) {
     $minutes_count = date_interval_format($diff, "%i");
     if ($days_count) {
         $result = date('d.m.y \в H:i', strtotime($add_date));
-    }
-    elseif ($hours_count) {
+    } elseif ($hours_count) {
         $result = "$hours_count" . " ч. назад";
-    }
-    else {
+    } else {
         $result = "$minutes_count" . " мин. назад";
     }
-    return $result;
+    RETURN $result;
 }
 
