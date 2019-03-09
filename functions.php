@@ -137,7 +137,6 @@ function price_format($price)
 }
 
 /**
- * Retrieve all categories
  * @param $link
  * @return array|null
  */
@@ -149,7 +148,6 @@ function get_categories($link)
 }
 
 /**
- * Retrieve the name of a category from its id
  * @param $link
  * @param $category_id
  * @return array|null
@@ -163,7 +161,6 @@ function get_category_name($link, $category_id)
 }
 
 /**
- * Retrieve new lots
  * @param $link
  * @return array|null
  */
@@ -182,24 +179,20 @@ function get_lots($link)
     RETURN $lots;
 }
 
-
-
-
 //Ищем в БД максимальную ставку по лоту
 /**
+ * Max lot's bid search
+ *
  * @param $link
  * @param $lot_id
- * @return array|null
+ * @return array|null - Max rate
  */
-function get_max_bet($link, $lot_id)
+function get_max_bid($link, $lot_id)
 {
-    $sql = "SELECT MAX(amount) FROM bets WHERE lot_id = ?;";
-    $max_bet = db_fetch_data_1($link, $sql, [$lot_id]);
-    RETURN $max_bet;
+    $sql = "SELECT amount FROM bets WHERE lot_id = ? ORDER BY amount DESC LIMIT 1;";
+    $max_bid = db_fetch_data_1($link, $sql, [$lot_id]);
+    RETURN $max_bid;
 }
-
-
-
 
 /**
  * @param $link
@@ -251,6 +244,8 @@ function get_lots_by_cat($link, $category_id, $page_items, $offset)
 /**
  * @param $link
  * @param $search
+ * @param $page_items
+ * @param $offset
  * @return array|null
  */
 function search_lot($link, $search, $page_items, $offset)
@@ -457,4 +452,3 @@ function time_ago($add_date)
     }
     RETURN $result;
 }
-

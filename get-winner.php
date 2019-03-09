@@ -8,10 +8,8 @@ $sql = "SELECT id, name from lots where dt_end <= now() and winner_id is null;";
 $closed_lots_without_winner = db_fetch_data($link, $sql);
 
 
-if ($closed_lots_without_winner)
-{
-    foreach ($closed_lots_without_winner as $lot)
-    {
+if ($closed_lots_without_winner) {
+    foreach ($closed_lots_without_winner as $lot) {
         $sql = "
         SELECT amount as max_rate, user_id as winner_id, name as winner_name, email
         FROM bets b
@@ -22,8 +20,7 @@ if ($closed_lots_without_winner)
         LIMIT 1;";
         $winner_data = db_fetch_data_1($link, $sql, [$lot['id']]);
 
-        if(!empty($winner_rate))
-        {
+        if (!empty($winner_rate)) {
             $sql = "UPDATE lots SET winner_id = ? where id = ?;";
             db_insert_data($link, $sql, [$winner_data['winner_id'], $lot['id']]);
 
@@ -54,8 +51,8 @@ if ($closed_lots_without_winner)
 
             // Message
             $msg_content = include_template('email.php', [
-                'lot_name'  => $lot['name'],
-                'lot_id'    => $lot['id'],
+                'lot_name' => $lot['name'],
+                'lot_id' => $lot['id'],
                 'winner_name' => $winner_data['winner_name']
             ]);
 
@@ -63,12 +60,9 @@ if ($closed_lots_without_winner)
 
             $result = $mailer->send($message);
 
-            if ($result)
-            {
+            if ($result) {
                 print("Рассылка успешно отправлена");
-            }
-            else
-            {
+            } else {
                 print("Не удалось отправить рассылку: " . $logger->dump());
             }
         }

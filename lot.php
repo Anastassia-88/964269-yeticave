@@ -20,20 +20,20 @@ $condition_3 = $lot['user_id'] == $user_id;
 $condition_4 = get_user_bets($link, $lot_id, $user_id);
 $show_bet_form = $condition_1 && $condition_2 && !$condition_3 && !$condition_4;
 
-// Highest bet search
-$max_bet_array = get_max_bet($link, $lot_id);
-$max_bet = $max_bet_array['MAX(amount)'];
+// Max rate search
+$max_bet_array = get_max_bid($link, $lot_id);
+$max_bet = $max_bet_array['amount'];
 
 // Current lot price definition
 $current_price = ($max_bet) ? $max_bet : $lot['start_price'];
 
-// Minimum bet definition
+// Minimum rate definition
 $min_bet = ($max_bet) ? ($current_price + $lot['bet_step']) : $current_price;
 
-// Total number of bets
+// Total number of rates
 $bets_count = count($bets);
 
-// Добавление ставки
+// Adding a new rate
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
