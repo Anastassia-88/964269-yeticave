@@ -1,8 +1,8 @@
 <nav class="nav">
     <ul class="nav__list container">
-        <?php foreach($categories as $category): ?>
+        <?php foreach ($categories as $category): ?>
             <li class="nav__item">
-                <a href="/all-lots.php?id=<?= $category['id'];?>"><?= $category['name']; ?></a>
+                <a href="/all-lots.php?id=<?= $category['id']; ?>"><?= $category['name']; ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -29,7 +29,7 @@
                                 <span class="lot__cost"><?= price_format($lot['start_price']); ?></span>
                             </div>
                             <div class="lot__timer timer">
-                                <?= time_left ($lot['dt_end']); ?>
+                                <?= time_left($lot['dt_end']); ?>
                             </div>
                         </div>
                     </div>
@@ -37,12 +37,5 @@
             <?php endforeach; ?>
         </ul>
     </section>
-    <ul class="pagination-list">
-        <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
-        <li class="pagination-item pagination-item-active"><a>1</a></li>
-        <li class="pagination-item"><a href="#">2</a></li>
-        <li class="pagination-item"><a href="#">3</a></li>
-        <li class="pagination-item"><a href="#">4</a></li>
-        <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
-    </ul>
+    <?= $pagination; ?>
 </div>

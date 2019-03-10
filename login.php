@@ -43,8 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $errors['password'] = 'Неверный пароль';
             }
-        }
-        else {
+        } else {
             $errors['email'] = 'Такой пользователь не найден';
         }
     }
@@ -58,8 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors,
             'categories' => $categories
         ]);
-    }
-    // Если массив ошибок пуст, значит валидации прошла успешно.
+    } // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Перенаправляем пользователя на главную страницу
         header("Location: /index.php");
@@ -77,8 +75,7 @@ else {
             'categories' => $categories,
             'lots' => $lots
         ]);
-    }
-    else {
+    } else {
         $page_content = include_template('login.php', [
             'categories' => $categories
         ]);
@@ -88,6 +85,7 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
     'username' => $user_name,
-    'title' => 'YetiCave']);
+    'title' => 'YetiCave'
+]);
 
 print($layout_content);

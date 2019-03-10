@@ -21,15 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     // Проверка для категорий
-    if ($lot['category'] == 'select'){
+    if ($lot['category'] == 'select') {
         $errors['category'] = 'Поле не заполнено';
     }
     // Проверка начальной цены. Содержимое поля должно быть числом больше нуля
-    if (!intval($lot['start_price']) or intval($lot['start_price'])<=0) {
+    if (!intval($lot['start_price']) or intval($lot['start_price']) <= 0) {
         $errors['start_price'] = 'Введите число больше нуля';
     }
     // Проверка шага ставки. Содержимое поля должно быть числом больше нуля
-    if (!intval($lot['bet_step']) or intval($lot['bet_step'])<=0) {
+    if (!intval($lot['bet_step']) or intval($lot['bet_step']) <= 0) {
         $errors['bet_step'] = 'Введите число больше нуля';
     }
     //Проверка даты завершения
@@ -57,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $errors['image'] = 'Загрузите картинку в формате jpg, jpeg или png';
         }
-    }
-    else {$errors['image'] = 'Вы не загрузили файл';
+    } else {
+        $errors['image'] = 'Вы не загрузили файл';
     }
     // Проверяем длину массива с ошибками.
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
@@ -69,12 +69,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors,
             'categories' => $categories
         ]);
-    }
-    // Если массив ошибок пуст, значит валидации прошла успешно.
+    } // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Отправляем лот в базу данных
-        $new_lot_data = [$lot['name'], $lot['description'], $lot['image'], $lot['start_price'], $lot['dt_end'],
-            $lot['bet_step'], $_SESSION['user']['id'], $lot['category']];
+        $new_lot_data = [
+            $lot['name'],
+            $lot['description'],
+            $lot['image'],
+            $lot['start_price'],
+            $lot['dt_end'],
+            $lot['bet_step'],
+            $_SESSION['user']['id'],
+            $lot['category']
+        ];
         add_lot($link, $new_lot_data);
         // Получаем ID нового лота и перенаправляем пользователя на страницу с его просмотром
         $lot_id = mysqli_insert_id($link);
@@ -85,12 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Показ информации для анонимных пользователей
 elseif (!isset($_SESSION['user'])) {
     $page_content = include_template('error_403.php', ['categories' => $categories]);
-    http_response_code (403);
-}
-// Показ информации для залогиненных пользователей
+    http_response_code(403);
+} // Показ информации для залогиненных пользователей
 else {
     $page_content = include_template('add.php', [
-        'categories' => $categories]
+            'categories' => $categories
+        ]
 
     );
 }

@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['email'] = 'Введите валидный E-mail адрес';
     }
     // Проверим, что указанный email уже не используется другим пользователем
-    if (empty($errors)){
+    if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $sign_up_form['email']);
         $sql = "SELECT id FROM users WHERE email = '$email'";
         $res = mysqli_query($link, $sql);
@@ -60,23 +60,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $sign_up_form['image'] = '';
     }
-    
+
     // Проверяем длину массива с ошибками.
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок
     if (count($errors)) {
-        $page_content = include_template('sign-up.php', ['sign_up_form' => $sign_up_form, 'errors' => $errors,
-            'categories' => $categories]);
-    }
-    // Если массив ошибок пуст, значит валидации прошла успешно.
+        $page_content = include_template('sign-up.php', [
+            'sign_up_form' => $sign_up_form,
+            'errors' => $errors,
+            'categories' => $categories
+        ]);
+    } // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Отправляем форму регистрации в базу данных
         // Чтобы не хранить пароль в открытом виде преобразуем его в хеш
         $password = password_hash($sign_up_form['password'], PASSWORD_DEFAULT);
-        $new_user_data = [$sign_up_form['name'], $sign_up_form['email'],
-            $sign_up_form['image'], $password,
-            $sign_up_form['message']];
-        add_user ($link, $new_user_data);
+        $new_user_data = [
+            $sign_up_form['name'],
+            $sign_up_form['email'],
+            $sign_up_form['image'],
+            $password,
+            $sign_up_form['message']
+        ];
+        add_user($link, $new_user_data);
         // Перенаправляем пользователя на страницу входа
         header("Location: /index.php");
         exit();
@@ -86,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Если метод не POST, значит форма не была отправлена и валидировать ничего не надо,
 // поэтому просто подключаем шаблон показа формы
 else {
-   $page_content = include_template('sign-up.php', ['categories' => $categories]);
+    $page_content = include_template('sign-up.php', ['categories' => $categories]);
 }
 $layout_content = include_template('layout.php', [
     'content' => $page_content,

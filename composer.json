@@ -1,0 +1,11 @@
+{
+    "name": "asus/964269-yeticave",
+    "description": "Website for online auction",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.1",
+        "wixel/gump": "^1.5",
+        "imagine/imagine": "^1.2"
+    }
+}
