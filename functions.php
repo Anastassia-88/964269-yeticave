@@ -185,7 +185,7 @@ function get_lots($link)
 }
 
 /**
- * Finds max lot's bid
+ * Finds max lot bid
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $lot_id
@@ -214,8 +214,10 @@ function count_lots_by_cat($link, $category_id)
 }
 
 /**
+ * Counts lots by search
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $search
+ * @param $search string - Search query / Поисковой запрос
  * @return array|null
  */
 function count_lots_by_search($link, $search)
@@ -249,7 +251,7 @@ function get_lots_by_cat($link, $category_id, $page_items, $offset)
 // Полнотекстовый поиск
 /**
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $search
+ * @param $search string - Search query / Поисковой запрос
  * @param $page_items
  * @param $offset
  * @return array|null
@@ -343,7 +345,7 @@ VALUES (NOW(), ?, ?, ?)";
 }
 
 /**
- * Gets all lot's bids
+ * Gets all lot bids
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $lot_id
