@@ -4,7 +4,7 @@ require_once 'functions.php';
 require_once 'vendor/autoload.php';
 
 // Retrieve closed lots without winner
-$sql = "SELECT id, name from lots where dt_end <= now() and winner_id is null;";
+$sql = "SELECT id, name FROM lots WHERE dt_end <= now() and winner_id is null;";
 $closed_lots_without_winner = db_fetch_data($link, $sql);
 
 if ($closed_lots_without_winner) {
@@ -20,7 +20,7 @@ if ($closed_lots_without_winner) {
         $winner_data = db_fetch_data_1($link, $sql, [$lot['id']]);
 
         if (!empty($winner_data)) {
-            $sql = "UPDATE lots SET winner_id = ? where id = ?;";
+            $sql = "UPDATE lots SET winner_id = ? WHERE id = ?;";
             db_insert_data($link, $sql, [$winner_data['winner_id'], $lot['id']]);
 
 

@@ -13,49 +13,39 @@
 function db_get_prepare_stmt($link, $sql, $data = [])
 {
     $stmt = mysqli_prepare($link, $sql);
-
     if ($data) {
         $types = '';
         $stmt_data = [];
-
         foreach ($data as $value) {
             $type = null;
-
             if (is_int($value)) {
                 $type = 'i';
-            } else {
-                if (is_string($value)) {
-                    $type = 's';
-                } else {
-                    if (is_double($value)) {
-                        $type = 'd';
-                    }
-                }
+            } elseif(is_string($value)) {
+                $type = 's';
+            } elseif (is_double($value)) {
+                $type = 'd';
             }
-
             if ($type) {
                 $types .= $type;
                 $stmt_data[] = $value;
             }
         }
-
         $values = array_merge([$stmt, $types], $stmt_data);
 
         $func = 'mysqli_stmt_bind_param';
         $func(...$values);
     }
-
     return $stmt;
 }
 
 /**
  * Returns data from MySQL database as associative two-dimensional array
- * Возвращает записи из БД в виде двумерного ассоциативного массива
+ * Возвращает записи из БД в виде двумерного ассоциативного массива (например, несколько лотов)
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $sql string - SQL query with placeholders instead of values / SQL запрос с плейсхолдерами вместо значений
  * @param array $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
- * @return array|null - Двумерный ассоциативный массив
+ * @return array|null - Data from MySQL database as associative two-dimensional array / Записи из БД в виде двумерного ассоциативного массива
  */
 function db_fetch_data($link, $sql, $data = [])
 {
@@ -69,12 +59,14 @@ function db_fetch_data($link, $sql, $data = [])
     return $result;
 }
 
-// Получение записей из БД в виде одномерного неассоциативного массива (один лот)
 /**
+ * Returns data from MySQL database as associative one-dimensional array
+ * Возвращает записи из БД в виде одномерного ассоциативного массива (например, один лот)
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $sql string - SQL query with placeholders instead of values / SQL запрос с плейсхолдерами вместо значений
  * @param array $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
- * @return array|null
+ * @return array|null - Data from MySQL database as associative one-dimensional array / Записи из БД в виде одномерного ассоциативного массива
  */
 function db_fetch_data_1($link, $sql, $data = [])
 {
@@ -88,8 +80,9 @@ function db_fetch_data_1($link, $sql, $data = [])
     return $result;
 }
 
-// Добавление новой записи
 /**
+ * Inserts a new record to MySQL database / Добавляет новую запись в БД
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $sql string - SQL query with placeholders instead of values / SQL запрос с плейсхолдерами вместо значений
  * @param array $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
@@ -106,188 +99,191 @@ function db_insert_data($link, $sql, $data = [])
 }
 
 /**
- * Includes template / Подключает шаблон
+ * Includes template from the folder "templates" / Подключает шаблон из папки "templates"
  *
- * @param $name
+ * @param $name string - Template file name / Имя файла шаблона
  * @param $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
- * @return false|string
+ * @return false|string - Returns "true" if the template was included / Возвращает "true", если шаблон был подключен
  */
 function include_template($name, $data)
 {
     $name = 'templates/' . $name;
     $result = 'Что-то пошло не так';
-
     if (!is_readable($name)) {
         return $result;
     }
-
     ob_start();
     extract($data);
     require $name;
-
     $result = ob_get_clean();
-
-    RETURN $result;
+    return $result;
 }
 
 /**
- * Formats price
+ * Formats price / Форматирует цену
  *
- * @param $price
- * @return string
+ * @param $price - Данные для форматирования
+ * @return string - Отформатированная цена
  */
 function price_format($price)
 {
-    RETURN number_format($price, 0, ",", " ") . " &#8381;";
+    return number_format($price, 0, ",", " ") . " &#8381;";
 }
 
 /**
+ * Returns categories from MySQL database / Возвращает из БД категории
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @return array|null
+ * @return array|null - Categories from MySQL database as associative two-dimensional array
  */
 function get_categories($link)
 {
-    $sql = "SELECT * from categories;";
+    $sql = "SELECT * FROM categories;";
     $categories = db_fetch_data($link, $sql);
-    RETURN $categories;
+    return $categories;
 }
 
 /**
+ * Returns category name from MySQL database by category id / Возвращает имя категории из БД по id категории
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $category_id
- * @return array|null
+ * @param $category_id - Category id / id категории
+ * @return array|null - Category name / Имя категории
  */
 function get_category_name($link, $category_id)
 {
-    $sql = "SELECT name from categories
-    where id = ?;";
+    $sql = "SELECT name FROM categories WHERE id = ?;";
     $category_name = db_fetch_data_1($link, $sql, [$category_id]);
-    RETURN $category_name;
+    return $category_name;
 }
 
 /**
+ * Returns 9 new lots from MySQL database / Возвращает из БД 9 новых лотов
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @return array|null
+ * @return array|null - 9 lots from MySQL database as associative two-dimensional array
  */
 function get_lots($link)
 {
     $sql = "SELECT 
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
+    l.id AS id, start_price, l.name AS name, image, c.name AS category, UNIX_TIMESTAMP(l.dt_add) AS dt_add, 
        description, dt_end
     FROM lots l
     JOIN categories c
-    ON l.category_id = c.id
+      ON l.category_id = c.id
     WHERE dt_end > now()
     ORDER BY l.id DESC
     LIMIT 9;";
     $lots = db_fetch_data($link, $sql);
-    RETURN $lots;
+    return $lots;
 }
 
 /**
- * Finds max lot bid
+ * Returns max lot bid from MySQL database / Возвращает из БД макс. ставку по лоту
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $lot_id
- * @return array|null - Max rate
+ * @param $lot_id - Lot id / id лота
+ * @return array|null - Max lot bid
  */
 function get_max_bid($link, $lot_id)
 {
     $sql = "SELECT amount FROM bets WHERE lot_id = ? ORDER BY amount DESC LIMIT 1;";
     $max_bid = db_fetch_data_1($link, $sql, [$lot_id]);
-    RETURN $max_bid;
+    return $max_bid;
 }
 
 /**
- * Counts lots by category
+ * Counts lots by category / Считает количество лотов в категории
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $category_id
- * @return array|null
+ * @param $category_id - Category id / id категории
+ * @return array|null - Количество лотов в категории / Number of lots by category
  */
 function count_lots_by_cat($link, $category_id)
 {
-    $sql = "SELECT COUNT(*) as cnt from lots 
-    where category_id = ? and dt_end > now();";
+    $sql = "SELECT COUNT(*) AS cnt FROM lots WHERE category_id = ? AND dt_end > now();";
     $result = db_fetch_data_1($link, $sql, [$category_id]);
-    RETURN $result;
+    return $result;
 }
 
 /**
- * Counts lots by search
+ * Counts lots by search / Считает количество лотов по результатам поиска
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $search string - Search query / Поисковой запрос
- * @return array|null
+ * @return array|null - Количество лотов по результатам поиска / Number of lots by search
  */
 function count_lots_by_search($link, $search)
 {
-    $sql = "SELECT COUNT(*) as cnt from lots 
-    where dt_end > now() and match(name, description) against(?);";
+    $sql = "SELECT COUNT(*) AS cnt FROM lots 
+    WHERE dt_end > now() AND match(name, description) against(?);";
     $result = db_fetch_data_1($link, $sql, [$search]);
-    RETURN $result;
+    return $result;
 }
 
-// Вывод лотов по категории
 /**
+ * Returns lots by category / Возвращает лоты по категории
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $category_id
- * @param $page_items
- * @param $offset
- * @return array|null
+ * @param $category_id - Category id / id категории
+ * @param $page_items - Number of lots per page / Количество лотов на странице
+ * @param $offset - Смещение выборки
+ * @return array|null - Лоты в выбранной категории / Lots in the chosen category
  */
 function get_lots_by_cat($link, $category_id, $page_items, $offset)
 {
-    $sql = "SELECT l.id as id, start_price, l.name as name, image, c.name as category, 
-       UNIX_TIMESTAMP(l.dt_add) as dt_add, description, dt_end from lots l
-    join categories c on l.category_id = c.id
-    where category_id = ? and dt_end > now()
-    order by l.id desc
+    $sql = "SELECT l.id AS id, start_price, l.name AS name, image, c.name AS category, 
+       UNIX_TIMESTAMP(l.dt_add) AS dt_add, description, dt_end FROM lots l
+    JOIN categories c 
+      ON l.category_id = c.id
+    WHERE category_id = ? AND dt_end > now()
+    ORDER BY l.id DESC
     LIMIT ? OFFSET ?;";
     $lots = db_fetch_data($link, $sql, [$category_id, $page_items, $offset]);
-    RETURN $lots;
+    return $lots;
 }
 
-// Полнотекстовый поиск
 /**
+ * Returns lots by search / Полнотекстовый поиск лотов по описанию и по названию
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $search string - Search query / Поисковой запрос
- * @param $page_items
- * @param $offset
- * @return array|null
+ * @param $page_items - Number of lots per page / Количество лотов на странице
+ * @param $offset - Смещение выборки
+ * @return array|null - Lots by search / Лоты по результатам поиска
  */
 function search_lot($link, $search, $page_items, $offset)
 {
     $sql = "SELECT 
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, description
-    from lots l
-    join categories c
-    on l.category_id = c.id
-    where dt_end > now() and match(l.name, description) against(?)
-    order by l.id desc
+    l.id AS id, start_price, l.name AS name, image, c.name AS category, UNIX_TIMESTAMP(l.dt_add) AS dt_add, description
+    FROM lots l
+    JOIN categories c
+     ON l.category_id = c.id
+    WHERE dt_end > now() AND match(l.name, description) against(?)
+    ORDER BY l.id DESC
     LIMIT ? OFFSET ?;";
     $lots = db_fetch_data($link, $sql, [$search, $page_items, $offset]);
-    RETURN $lots;
+    return $lots;
 }
 
 /**
- * Gets lot by id
+ * Returns lot data by id / Возвращает данные лота по id
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $lot_id
- * @return array|null
+ * @param $lot_id - Lot id / id лота
+ * @return array|null - Lot data from MySQL database as associative one-dimensional array
  */
 function get_lot($link, $lot_id)
 {
     $sql = "SELECT
-    l.id as id, start_price, l.name as name, image, c.name as category, UNIX_TIMESTAMP(l.dt_add) as dt_add, 
+    l.id AS id, start_price, l.name AS name, image, c.name AS category, UNIX_TIMESTAMP(l.dt_add) AS dt_add, 
        description, bet_step, dt_end, user_id
-    from lots l
-    join categories c
-    on l.category_id = c.id
-    where l.id = ?;";
+    FROM lots l
+    JOIN categories c
+     ON l.category_id = c.id
+    WHERE l.id = ?;";
     $lot = db_fetch_data_1($link, $sql, [$lot_id]);
-    RETURN $lot;
+    return $lot;
 }
 
 /**
@@ -303,19 +299,20 @@ values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%d.%m.%Y\"), ?, ?, ?)";
     db_insert_data($link, $sql, $data);
 }
 
-// Функция для проверки даты на соответствие формату
 /**
- * @param $date
- * @return bool
+ * Checks date to be in format «dd.mm.yyyy» / Проверяет дату на соответствие формату «ДД.ММ.ГГГГ»
+ *
+ * @param $date - Данные для проверки
+ * @return bool - Returns "true" if date is in format «dd.mm.yyyy» / Возвращает "true", если дата соответствует формату «ДД.ММ.ГГГГ»
  */
 function check_date_format($date)
 {
     $result = false;
     $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
-    if (preg_match($regexp, $date, $parts) && count($parts) == 4) {
+    if (preg_match($regexp, $date, $parts) && count($parts) === 4) {
         $result = checkdate($parts[2], $parts[1], $parts[3]);
     }
-    RETURN $result;
+    return $result;
 }
 
 /**
@@ -345,74 +342,74 @@ VALUES (NOW(), ?, ?, ?)";
 }
 
 /**
- * Gets all lot bids
+ * Returns all lot bids / Возвращает все ставки по лоту
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $lot_id
- * @return array|null
+ * @param $lot_id - Lot id / id лота
+ * @return array|null - Lot bids / Ставки по лоту
  */
 function get_bets($link, $lot_id)
 {
     $sql = "SELECT 
-    b.id, b.dt_add as dt_add, amount, u.name as name
-    from bets b
-    join users u
-    on b.user_id = u.id
-    where lot_id = ?
-    order by b.id desc;";
+    b.id, b.dt_add AS dt_add, amount, u.name AS name
+    FROM bets b
+    JOIN users u
+     ON b.user_id = u.id
+    WHERE lot_id = ?
+    ORDER BY b.id DESC;";
     $bets = db_fetch_data($link, $sql, [$lot_id]);
-    RETURN $bets;
+    return $bets;
 }
 
-// Поиск ставки юзера по лоту
 /**
+ * Returns all user bids by lot id / Возвращает ставки юзера по id лота
+ *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $lot_id
- * @param $user_id
- * @return array|null
+ * @param $lot_id - Lot id / id лота
+ * @param $user_id - User id / id юзера
+ * @return array|null - Ставки юзера по лоту
  */
 function get_user_bets($link, $lot_id, $user_id)
 {
     $sql = "SELECT 
     b.id
-    from bets b
-    where lot_id = ? and user_id = ?;";
+    FROM bets b
+    WHERE lot_id = ? AND user_id = ?;";
     $bets = db_fetch_data($link, $sql, [$lot_id, $user_id]);
-    RETURN $bets;
+    return $bets;
 }
 
-// Поиск всех ставок юзера
 /**
- * Finds all user's bids
+ * Returns all user bids / Возвращает все ставки юзера
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $user_id
+ * @param $user_id - User id / id юзера
  * @return array|null - Array with all user's bids
  */
 function get_my_rates($link, $user_id)
 {
-    $sql = "select b.dt_add, amount, b.user_id, l.name as lot_name, c.name as category_name, message, l.image, 
-       l.id as lot_id, l.dt_end, winner_id
-    from bets b
-    join lots l
-    on b.lot_id = l.id
-    join categories c
-    on l.category_id = c.id
-    join users u
-    on l.user_id = u.id
-    where b.user_id = ?;";
+    $sql = "SELECT b.dt_add, amount, b.user_id, l.name AS lot_name, c.name AS category_name, message, l.image, 
+       l.id AS lot_id, l.dt_end, winner_id
+    FROM bets b
+    JOIN lots l
+     ON b.lot_id = l.id
+    JOIN categories c
+     ON l.category_id = c.id
+    JOIN users u
+     ON l.user_id = u.id
+    WHERE b.user_id = ?;";
     $rates = db_fetch_data($link, $sql, [$user_id]);
-    RETURN $rates;
+    return $rates;
 }
 
-// Сколько дней, часов и минут осталось до окончания торгов по лоту
 /**
- * @param $end_date
- * @return string
+ * Возвращает сколько дней, часов и минут осталось до окончания торгов по лоту
+ *
+ * @param $end_date - Дата окончания торгов по лоту
+ * @return string - Сколько дней, часов и минут осталось до окончания торгов по лоту
  */
 function time_left($end_date)
 {
-    // date_default_timezone_set('Europe/Berlin');
     $cur_date = date_create("now");
     $dt_end = date_create($end_date);
     $diff = date_diff($cur_date, $dt_end);
@@ -420,17 +417,17 @@ function time_left($end_date)
     $hours_count = date_interval_format($diff, "%h");
     $minutes_count = date_interval_format($diff, "%i");
     $result = "$days_count" . " дн. " . "$hours_count" . " ч. " . "$minutes_count" . " мин. ";
-    RETURN $result;
+    return $result;
 }
 
-// Сколько дней или часов и минут осталось до окончания торгов по лоту
 /**
- * @param $end_date
- * @return DateInterval|string
+ * Возвращает сколько дней или часов и минут осталось до окончания торгов по лоту
+ *
+ * @param $end_date - Дата окончания торгов по лоту
+ * @return DateInterval|string - Сколько дней или часов и минут осталось до окончания торгов по лоту
  */
 function time_left_short($end_date)
 {
-    // date_default_timezone_set('Europe/Berlin');
     $cur_date = date_create("now");
     $dt_end = date_create($end_date);
     $diff = date_diff($cur_date, $dt_end);
@@ -440,17 +437,17 @@ function time_left_short($end_date)
     } else {
         $result = date_interval_format($diff, "%H:%i");
     }
-    RETURN $result;
+    return $result;
 }
 
-// Как давно была сделана запись
 /**
- * @param $add_date
- * @return false|string
+ * Возвращает как давно была сделана запись
+ *
+ * @param $add_date - Дата добавления записи
+ * @return false|string - Как давно была сделана запись
  */
 function time_ago($add_date)
 {
-    // date_default_timezone_set('Europe/Berlin');
     $cur_date = date_create("now");
     $dt_add = date_create($add_date);
     $diff = date_diff($cur_date, $dt_add);
@@ -464,5 +461,5 @@ function time_ago($add_date)
     } else {
         $result = "$minutes_count" . " мин. назад";
     }
-    RETURN $result;
+    return $result;
 }

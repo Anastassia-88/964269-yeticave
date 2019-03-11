@@ -2,7 +2,7 @@
 
     <ul class="pagination-list">
 
-        <?php if ($cur_page == 1): ?>
+        <?php if ($cur_page === 1): ?>
             <li class="pagination-item pagination-item-prev"><a href="#">Назад</a></li>
         <?php else: ?>
             <li class="pagination-item pagination-item-prev"><a
@@ -10,11 +10,11 @@
         <?php endif; ?>
 
         <?php foreach ($pages as $page): ?>
-            <li class="pagination-item <?php if ($page == $cur_page): ?>pagination-item-active<?php endif; ?>">
+            <li class="pagination-item <?php if ($page === $cur_page): ?>pagination-item-active<?php endif; ?>">
                 <a href="all-lots.php?id=<?= $category_id; ?>&page=<?= $page; ?>"> <?= $page; ?> </a></li>
         <?php endforeach; ?>
 
-        <?php if ($cur_page == $pages_count): ?>
+        <?php if ($cur_page === $pages_count): ?>
             <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
         <?php else: ?>
             <li class="pagination-item pagination-item-next"><a

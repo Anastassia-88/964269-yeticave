@@ -5,7 +5,7 @@ require_once 'functions.php';
 $categories = get_categories($link);
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную $lot
     $lot = $_POST['lot'];
     // Затем определяем список полей, которые собираемся валидировать
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     // Проверка для категорий
-    if ($lot['category'] == 'select') {
+    if ($lot['category'] === 'select') {
         $errors['category'] = 'Поле не заполнено';
     }
     // Проверка начальной цены. Содержимое поля должно быть числом больше нуля
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $file_type = finfo_file($finfo, $tmp_name);
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $lot
-        if ($file_type == "image/jpeg" or $file_type == "image/png") {
+        if ($file_type === "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'img/' . $path);
             $lot['image'] = ('img/' . $path);
         } else {

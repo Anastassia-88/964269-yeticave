@@ -2,12 +2,11 @@
 require_once 'init.php';
 require_once 'functions.php';
 
-// запрос для получения массива категорий
 $categories = get_categories($link);
 
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную
     $login_form = $_POST;
     // Затем определяем список полей, которые собираемся валидировать
@@ -31,23 +30,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = mysqli_real_escape_string($link, $login_form['email']);
         $sql = "SELECT * FROM users WHERE email = '$email'";
         $res = mysqli_query($link, $sql);
-
-
-        // Проверяем, что сохраненный хеш пароля и введенный пароль из формы совпадают
-        // Если совпадение есть, значит пользователь указал верный пароль
-        // Тогда мы можем открыть для него сессию и записать в неё все данные о пользователе
-        $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
-        if (!count($errors) and $user) {
-            if (password_verify($login_form['password'], $user['password'])) {
-                $_SESSION['user'] = $user;
-            } else {
-                $errors['password'] = 'Неверный пароль';
-            }
-        } else {
-            $errors['email'] = 'Такой пользователь не найден';
-        }
     }
-
+    // Проверяем, что сохраненный хеш пароля и введенный пароль из формы совпадают
+    // Если совпадение есть, значит пользователь указал верный пароль
+    // Тогда мы можем открыть для него сессию и записать в неё все данные о пользователе
+    $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
+    if (!count($errors) and $user) {
+        if (password_verify($login_form['password'], $user['password'])) {
+            $_SESSION['user'] = $user;
+        } else {
+            $errors['password'] = 'Неверный пароль';
+        }
+    } else {
+        $errors['email'] = 'Такой пользователь не найден';
+    }
     // Проверяем длину массива с ошибками.
     // Если он не пустой, значит были ошибки и мы должны показать их пользователю вместе с формой.
     // Для этого подключаем шаблон формы и передаем туда массив, где будут заполненные поля, а также список ошибок

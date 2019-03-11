@@ -2,15 +2,13 @@
 require_once 'init.php';
 require_once 'functions.php';
 
-// Запрос для получения массива категорий
 $categories = get_categories($link);
-
-$search = (isset($_GET['search'])) ? (trim($_GET['search'])) : '';
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 // Current page
 $cur_page = $_GET['page'] ?? 1;
 
-// Number of lots per page
+// Number of lots per page / Количество лотов на странице
 $page_items = 9;
 
 $items_count = count_lots_by_search($link, $search);

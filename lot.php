@@ -2,11 +2,9 @@
 require_once 'init.php';
 require_once 'functions.php';
 
-// Получаем массив категорий
 $categories = get_categories($link);
 
-// Получаем массив лота
-$lot_id = $_GET['id'];
+$lot_id = $_GET['id'] ?? '';
 $lot = get_lot($link, $lot_id);
 
 // Получаем массив ставок
@@ -16,7 +14,7 @@ $bets = get_bets($link, $lot_id);
 // юзер авторизован, срок размещения лота не истёк, лот создан др. юзером, юзер еще не делал ставки по этому лоту
 $condition_1 = isset($_SESSION['user']);
 $condition_2 = strtotime("now") < strtotime($lot['dt_end']);
-$condition_3 = $lot['user_id'] == $user_id;
+$condition_3 = $lot['user_id'] === $user_id;
 $condition_4 = get_user_bets($link, $lot_id, $user_id);
 $show_bet_form = $condition_1 && $condition_2 && !$condition_3 && !$condition_4;
 
@@ -36,7 +34,7 @@ $bets_count = count($bets);
 // Adding a new rate
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную $bet
     $bet = $_POST;
 
@@ -91,5 +89,4 @@ $layout_content = include_template('layout.php', [
     'username' => $user_name,
     'title' => 'YetiCave'
 ]);
-
 print($layout_content);
