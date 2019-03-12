@@ -314,33 +314,21 @@ values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%Y-%m-%d\"), ?, ?, ?)";
 }
 
 /**
- * Checks date to be in format «dd.mm.yyyy» / Проверяет дату на соответствие формату «ДД.ММ.ГГГГ»
+ * Checks date to be in format «dd.mm.yyyy» or «yyyy-mm-dd» / Проверяет дату на соответствие формату «ДД.ММ.ГГГГ» или «ГГГГ-ММ-ДД»
  *
  * @param $date - Данные для проверки
- * @return bool - Returns "true" if date is in format «dd.mm.yyyy» / Возвращает "true", если дата соответствует формату «ДД.ММ.ГГГГ»
+ * @return bool - Returns "true" if date is in format «dd.mm.yyyy» or «yyyy-mm-dd» / Возвращает "true", если дата соответствует формату «ДД.ММ.ГГГГ» или «ГГГГ-ММ-ДД»
  */
-function check_date_format_1($date)
+function check_date_format($date)
 {
-    $result = false;
-    $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
-    if (preg_match($regexp, $date, $parts) && count($parts) === 4) {
+    $regexp_1 = '/(\d{2})\.(\d{2})\.(\d{4})/m';
+    $regexp_2 = '/(\d{4})\-(\d{2})\-(\d{2})/m';
+    if (preg_match($regexp_1, $date, $parts) && count($parts) === 4) {
         $result = checkdate($parts[2], $parts[1], $parts[3]);
-    }
-    return $result;
-}
-
-/**
- * Checks date to be in format «yyyy-mm-dd» / Проверяет дату на соответствие формату «ГГГГ-ММ-ДД»
- *
- * @param $date - Данные для проверки
- * @return bool - Returns "true" if date is in format «yyyy-mm-dd» / Возвращает "true", если дата соответствует формату «ГГГГ-ММ-ДД»
- */
-function check_date_format_2($date)
-{
-    $result = false;
-    $regexp = '/(\d{4})\-(\d{2})\-(\d{2})/m';
-    if (preg_match($regexp, $date, $parts) && count($parts) === 4) {
+    } elseif (preg_match($regexp, $date, $parts) && count($parts) === 4) {
         $result = checkdate($parts[2], $parts[3], $parts[1]);
+    } else {
+        $result = false;
     }
     return $result;
 }
