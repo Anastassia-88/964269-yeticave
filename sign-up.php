@@ -7,7 +7,7 @@ $categories = get_categories($link);
 
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную
     $sign_up_form = $_POST;
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $sign_up_form
-        if ($file_type == "image/jpeg" or $file_type == "image/png") {
+        if ($file_type === "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'uploads/' . $path);
             $sign_up_form['image'] = ('uploads/' . $path);
         } else {
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ];
         add_user($link, $new_user_data);
         // Перенаправляем пользователя на страницу входа
-        header("Location: /index.php");
+        header("Location: /login.php");
         exit();
     }
 }

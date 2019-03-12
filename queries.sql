@@ -33,34 +33,34 @@ values
 (12000, 2, 1);
 
 -- получить все категории
-select *
-from categories;
+SELECT *
+FROM categories;
 
 -- получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории
-select l.name, start_price, image, max(amount) as price, c.name
-from lots l
-join categories c
-on l.category_id = c.id
-left join bets b
-on b.lot_id = l.id
-where winner_id is null
+SELECT l.name, start_price, image, max(amount) as price, c.name
+FROM lots l
+JOIN categories c
+  ON l.category_id = c.id
+LEFT JOIN bets b
+  ON b.lot_id = l.id
+WHERE winner_id is null
 group by l.id
 order by l.id desc;
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот
-select l.id, l.name, c.name
-from lots l
-join categories c
-on l.category_id = c.id
-where l.id = 1;
+SELECT l.id, l.name, c.name
+FROM lots l
+  JOIN categories c
+    ON l.category_id = c.id
+WHERE l.id = 1;
 
 -- обновить название лота по его идентификатору;
 update lots
 set name = 'Rossignol District Snowboard 2014'
-where id = 1;
+WHERE id = 1;
 
 -- получить список самых свежих ставок для лота по его идентификатору
-select *
-from bets b
-where lot_id = 1
+SELECT *
+FROM bets b
+WHERE lot_id = 1
 order by dt_add desc;

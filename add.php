@@ -5,7 +5,7 @@ require_once 'functions.php';
 $categories = get_categories($link);
 // Убедимся, что форма была отправлена. Для этого проверяем метод, которым была запрошена страница
 // Если метод POST - значит этот сценарий был вызван отправкой формы
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // В массиве $_POST содержатся все данные из формы. Копируем его в переменную $lot
     $lot = $_POST['lot'];
     // Затем определяем список полей, которые собираемся валидировать
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     // Проверка для категорий
-    if ($lot['category'] == 'select') {
+    if ($lot['category'] === 'select') {
         $errors['category'] = 'Поле не заполнено';
     }
     // Проверка начальной цены. Содержимое поля должно быть числом больше нуля
@@ -33,10 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['bet_step'] = 'Введите число больше нуля';
     }
     //Проверка даты завершения
-    //Содержимое поля «дата завершения» должно быть датой в формате «ДД.ММ.ГГГГ»
+    //Содержимое поля «дата завершения» должно быть датой в формате «ДД.ММ.ГГГГ» или «ГГГГ-ММ-ДД»
     //Указанная дата должна быть больше текущей даты, хотя бы на один день
-    if (!check_date_format($date = $lot['dt_end'])) {
-        $errors['dt_end'] = 'Введите дату в формате «ДД.ММ.ГГГГ»';
+    if (!check_date_format($lot['dt_end'])) {
+        $errors['dt_end'] = 'Введите дату в формате «ДД.ММ.ГГГГ» или «ГГГГ-ММ-ДД»';
     } elseif (strtotime($lot['dt_end']) - strtotime("tomorrow") < 0) {
         $errors['dt_end'] = 'Указанная дата должна быть больше текущей даты';
     }
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $file_type = finfo_file($finfo, $tmp_name);
         // Если файл соответствует ожидаемому типу, то мы копируем его в директорию где лежат все изображения,
         // а также добавляем путь к загруженному изображению в массив $lot
-        if ($file_type == "image/jpeg" or $file_type == "image/png") {
+        if ($file_type === "image/jpeg" or $file_type == "image/png") {
             move_uploaded_file($tmp_name, 'img/' . $path);
             $lot['image'] = ('img/' . $path);
         } else {
@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Отправляем лот в базу данных
+        $lot['dt_end'] = date("Y-m-d", strtotime($lot['dt_end']));
         $new_lot_data = [
             $lot['name'],
             $lot['description'],
@@ -86,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Получаем ID нового лота и перенаправляем пользователя на страницу с его просмотром
         $lot_id = mysqli_insert_id($link);
         header("Location: lot.php?id=" . $lot_id);
+        exit();
     }
 }
 // Если метод не POST, значит форма не была отправлена и валидировать ничего не надо

@@ -3,11 +3,10 @@ require_once 'init.php';
 require_once 'functions.php';
 require_once 'get-winner.php';
 
-// SQL-запрос для получения списка новых лотов
-$lots = get_lots($link);
-
-// SQL-запрос для получения списка категорий
 $categories = get_categories($link);
+
+$page_items = 9;
+$lots = get_lots($link, $page_items);
 
 $page_content = include_template('index.php', [
     'lots' => $lots,

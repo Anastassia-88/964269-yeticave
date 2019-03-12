@@ -2,20 +2,18 @@
 require_once 'init.php';
 require_once 'functions.php';
 
-// Categories (one-dimensional array)
 $categories = get_categories($link);
+$category_id = $_GET['id'] ?? '';
 
-$category_id = $_GET['id'];
-
-// Current page
+// Current page / Текущая страница
 $cur_page = $_GET['page'] ?? 1;
 
-// Number of lots per page
+// Number of lots per page / Количество лотов на странице
 $page_items = 9;
 
 $items_count = count_lots_by_cat($link, $category_id);
 
-$pages_count = ceil($items_count['cnt'] / $page_items);
+$pages_count = $items_count['cnt'] ? (int)ceil($items_count['cnt'] / $page_items) : '';
 $offset = ($cur_page - 1) * $page_items;
 // Заполняем массив номерами всех страниц
 $pages = range(1, $pages_count);
@@ -44,5 +42,4 @@ $layout_content = include_template('layout.php', [
     'username' => $user_name,
     'title' => 'YetiCave'
 ]);
-
 print($layout_content);
