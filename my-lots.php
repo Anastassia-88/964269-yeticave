@@ -19,5 +19,4 @@ $layout_content = include_template('layout.php', [
     'username' => $user_name,
     'title' => 'YetiCave'
 ]);
-var_dump($user_id, $rates);
 print($layout_content);
