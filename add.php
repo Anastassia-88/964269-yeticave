@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //Проверка даты завершения
     //Содержимое поля «дата завершения» должно быть датой в формате «ДД.ММ.ГГГГ» или «ГГГГ-ММ-ДД»
     //Указанная дата должна быть больше текущей даты, хотя бы на один день
-    if (!check_date_format($date = $lot['dt_end'])) {
+    if (!check_date_format($lot['dt_end']) {
         $errors['dt_end'] = 'Введите дату в формате «ДД.ММ.ГГГГ» или «ГГГГ-ММ-ДД»';
     } elseif (strtotime($lot['dt_end']) - strtotime("tomorrow") < 0) {
         $errors['dt_end'] = 'Указанная дата должна быть больше текущей даты';
@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } // Если массив ошибок пуст, значит валидации прошла успешно.
     else {
         // Отправляем лот в базу данных
+        $lot['dt_end'] = date("Y-m-d", strtotime($lot['dt_end']));
         $new_lot_data = [
             $lot['name'],
             $lot['description'],
@@ -82,11 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user']['id'],
             $lot['category']
         ];
-        if (check_date_format_1($date = $lot['dt_end'])) {
-            add_lot_1($link, $new_lot_data);
-        } elseif (check_date_format_2($date = $lot['dt_end'])) {
-            add_lot_2($link, $new_lot_data);
-        }
+        add_lot($link, $new_lot_data);
         // Получаем ID нового лота и перенаправляем пользователя на страницу с его просмотром
         $lot_id = mysqli_insert_id($link);
         header("Location: lot.php?id=" . $lot_id);
