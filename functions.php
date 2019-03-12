@@ -292,10 +292,23 @@ function get_lot($link, $lot_id)
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
  */
-function add_lot($link, $data)
+function add_lot_1($link, $data)
 {
     $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
 values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%d.%m.%Y\"), ?, ?, ?)";
+    db_insert_data($link, $sql, $data);
+}
+
+/**
+ * Adds a new lot to a MySQL database / Добавляет новый лот в БД
+ *
+ * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
+ * @param $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
+ */
+function add_lot_2($link, $data)
+{
+    $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
+values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%Y-%m-%d\"), ?, ?, ?)";
     db_insert_data($link, $sql, $data);
 }
 
@@ -305,12 +318,28 @@ values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%d.%m.%Y\"), ?, ?, ?)";
  * @param $date - Данные для проверки
  * @return bool - Returns "true" if date is in format «dd.mm.yyyy» / Возвращает "true", если дата соответствует формату «ДД.ММ.ГГГГ»
  */
-function check_date_format($date)
+function check_date_format_1($date)
 {
     $result = false;
     $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
     if (preg_match($regexp, $date, $parts) && count($parts) === 4) {
         $result = checkdate($parts[2], $parts[1], $parts[3]);
+    }
+    return $result;
+}
+
+/**
+ * Checks date to be in format «yyyy-mm-dd» / Проверяет дату на соответствие формату «ГГГГ-ММ-ДД»
+ *
+ * @param $date - Данные для проверки
+ * @return bool - Returns "true" if date is in format «yyyy-mm-dd» / Возвращает "true", если дата соответствует формату «ГГГГ-ММ-ДД»
+ */
+function check_date_format_2($date)
+{
+    $result = false;
+    $regexp = '/(\d{4})\-(\d{2})\-(\d{2})/m';
+    if (preg_match($regexp, $date, $parts) && count($parts) === 4) {
+        $result = checkdate($parts[2], $parts[3], $parts[1]);
     }
     return $result;
 }
