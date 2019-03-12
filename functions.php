@@ -312,7 +312,7 @@ function check_date_format($date)
     $regexp_2 = '/(\d{4})\-(\d{2})\-(\d{2})/m';
     if (preg_match($regexp_1, $date, $parts) && count($parts) === 4) {
         $result = checkdate($parts[2], $parts[1], $parts[3]);
-    } elseif (preg_match($regexp, $date, $parts) && count($parts) === 4) {
+    } elseif (preg_match($regexp_2, $date, $parts) && count($parts) === 4) {
         $result = checkdate($parts[2], $parts[3], $parts[1]);
     } else {
         $result = false;
