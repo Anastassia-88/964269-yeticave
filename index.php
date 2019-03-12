@@ -6,7 +6,7 @@ require_once 'get-winner.php';
 $categories = get_categories($link);
 
 $page_items = 9;
-$lots = get_lots($link);
+$lots = get_lots($link, $page_items);
 
 $page_content = include_template('index.php', [
     'lots' => $lots,
