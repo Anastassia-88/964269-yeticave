@@ -158,12 +158,13 @@ function get_category_name($link, $category_id)
 }
 
 /**
- * Returns 9 new lots from MySQL database / Возвращает из БД 9 новых лотов
+ * Returns new lots from MySQL database / Возвращает новые лоты из БД
  *
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @return array|null - 9 lots from MySQL database as associative two-dimensional array
+ * @param $page_items - Number of lots per page / Количество лотов на странице
+ * @return array|null - lots from MySQL database as associative two-dimensional array
  */
-function get_lots($link)
+function get_lots($link, $page_items)
 {
     $sql = "SELECT 
     l.id AS id, start_price, l.name AS name, image, c.name AS category, UNIX_TIMESTAMP(l.dt_add) AS dt_add, 
@@ -173,8 +174,8 @@ function get_lots($link)
       ON l.category_id = c.id
     WHERE dt_end > now()
     ORDER BY l.id DESC
-    LIMIT 9;";
-    $lots = db_fetch_data($link, $sql);
+    LIMIT ?;";
+    $lots = db_fetch_data($link, $sql, [$page_items]);
     return $lots;
 }
 
