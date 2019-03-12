@@ -293,23 +293,10 @@ function get_lot($link, $lot_id)
  * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
  * @param $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
  */
-function add_lot_1($link, $data)
+function add_lot($link, $data)
 {
     $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
-values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%d.%m.%Y\"), ?, ?, ?)";
-    db_insert_data($link, $sql, $data);
-}
-
-/**
- * Adds a new lot to a MySQL database / Добавляет новый лот в БД
- *
- * @param $link mysqli - Connection to a MySQL database server / Ресурс соединения
- * @param $data - Values to insert instead of placeholders / Данные для вставки на место плейсхолдеров
- */
-function add_lot_2($link, $data)
-{
-    $sql = "insert into lots (dt_add, name, description, image, start_price, dt_end, bet_step, user_id, category_id)
-values (now(), ?, ?, ?, ?, STR_TO_DATE(?, \"%Y-%m-%d\"), ?, ?, ?)";
+values (now(), ?, ?, ?, ?, ?, ?, ?, ?)";
     db_insert_data($link, $sql, $data);
 }
 
