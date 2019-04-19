@@ -1,7 +1,7 @@
 <?php
 session_start();
 $user_name = $_SESSION['user']['name'] ?? '';
-$user_id = (int)$_SESSION['user']['id'] ?? '';
+$user_id = $_SESSION['user']['id'] ?? '';
 
 // date_default_timezone_set('Europe/Berlin');
 
